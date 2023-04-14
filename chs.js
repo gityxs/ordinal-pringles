@@ -326,7 +326,7 @@ var cnPrefix = {
     "Toggle the Challenge Confirmation": "切换 挑战 确认 ",
     "Toggle the Challenge Completion Popup": "切换 挑战完成 弹窗 ",
     "You are in Challenge ": "你在挑战 ",
-    "You've loaded into Ordinal PRINGLES v": "您已成功加载 序数 PRINGLES v",
+    "You've loaded into Ordinal PRINGLES v": "您已成功加载 序数品客 v",
     "Your Challenges are multiplying AutoBuyer speed by a total of ": "您的挑战是将 自动购买器 速度总计乘以 ",
     "All previous Challenges at once EXCEPT Challenge ": "一次完成所有先前的挑战，除了挑战 ",
     "Markup AutoBuyer: ": "标记自动购买器：",
