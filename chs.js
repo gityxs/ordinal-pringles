@@ -197,7 +197,7 @@ var cnItems = {
     "Go ahead.": "继续。",
     "Go back!": "返回！",
     "This will reset your Booster Upgrades and return spent Boosters, but it will trigger a Booster Reset!": "这将重置您的助推器升级并返还用过的助推器，但它会触发助推器重置！",
-    "": "",
+    "Requires: ?????": "需要: ?????",
     "": "",
     "": "",
     "": "",
