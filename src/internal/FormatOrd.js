@@ -61,7 +61,23 @@ function displayOrd(ord,over,base,trim = data.ord.trim) {
     return finalOutput
 }
 
-function displayPsiOrd(ord, trim) {
+function displayHierarchyOrd(ord,over,base,trim = data.ord.trim) {
+    ord = Math.floor(ord)
+    over = Math.floor(over)
+    if(trim <= 0) return `...`
+    if(ord < base) return ord+over
+    const magnitude = Math.floor(Math.log(ord)/Math.log(base))
+    const magnitudeAmount = base**magnitude
+    const amount = Math.floor(ord/magnitudeAmount)
+    let finalOutput = "&omega;"
+    if (magnitude > 1) finalOutput += "<sup>"+displayHierarchyOrd(magnitude, 0, base)+"</sup>"
+    if (amount > 1) finalOutput += amount
+    const firstAmount = amount*magnitudeAmount
+    if(ord-firstAmount > 0) finalOutput += "+" + displayHierarchyOrd(ord-firstAmount, over, base, trim - 1)
+    return finalOutput
+}
+
+/*function displayPsiOrd(ord, trim) {
     if(ord === 0) return ""
     if(trim <= 0) return "..."
     if(ord < 4) return extraOrdMarks[ord]
@@ -72,6 +88,20 @@ function displayPsiOrd(ord, trim) {
     const finalOutput = ordMarks[magnitude]
         .replace(/x/, displayPsiOrd(ord-magnitudeAmount, trim-1))
         .replace(/y/, displayPsiOrd(ord-magnitudeAmount+1, trim-1))
+    return `${finalOutput}`
+}
+*/
+
+function displayPsiOrd(ord, trim) {
+    ord = Math.floor(ord)
+    if(ord === 0) return ""
+    if(trim <= 0) return "..."
+    if(ord < 4) return extraOrdMarks[ord]
+    const magnitude = Math.floor(Math.log(ord/4)/Math.log(3))
+    const magnitudeAmount = 4*3**magnitude
+    let finalOutput = ordMarks[Math.min(magnitude,ordMarks.length-1)]
+    if(finalOutput.includes("x"))finalOutput = finalOutput.replace(/x/, displayPsiOrd(ord-magnitudeAmount, trim-1))
+    if(finalOutput.includes("y"))finalOutput = finalOutput.replace(/y/, displayPsiOrd(ord-magnitudeAmount+1, trim-1))
     return `${finalOutput}`
 }
 
@@ -90,9 +120,10 @@ function calculateHardy(ord = data.ord.ordinal, over = data.ord.over, base = dat
     return value
 }
 
-function ordinalDisplay(type) {
+function ordinalDisplay(type, ord=data.ord.ordinal, over=data.ord.over, base=data.ord.base, trim=data.ord.trim, d=true) {
     return (
-        `${type}<sub>${displayOrd(data.ord.ordinal, Math.floor(data.ord.over), data.ord.base)}</sub>`
+        d ? `${type}<sub>${displayOrd(ord, Math.floor(over), base, trim)}</sub>`
+        : `${type}<sub>${displayHierarchyOrd(ord, Math.floor(over), base, trim)}</sub>`
     )
 }
 
@@ -100,6 +131,7 @@ function successor(n = 1, m=false) {
     if(data.chal.active[6] && data.successorClicks >= 1000 && m) return
     if(data.ord.isPsi) return
     if(m)++data.successorClicks
+
     if (data.ord.ordinal % data.ord.base === data.ord.base - 1) data.ord.over+=n
     else data.ord.ordinal+=n
 }
@@ -118,10 +150,8 @@ function maximize() {
 }
 
 function changeTrim(x){
-    try{ data.ord.trim = Math.floor(x) }
-    catch (e) {
-        createAlert('Failure', 'Invalid Input.', `Oops.`)
-    }
+    if (isNaN(Math.floor(x))) return createAlert('Failure', 'Invalid Input.', `Oops.`)
+    data.ord.trim = Math.floor(x)
 }
 
 function updateOrdHTML(){

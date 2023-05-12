@@ -1,9 +1,11 @@
 const D = x => new Decimal(x)
 //create all the variables in a data object for saving
-const VERSION = "0.0.5"
+const VERSION = "0.0.6"
+const VERSION_NAME = "The Bachmann-Howard Pringle"
+const VERSION_DATE = "May 3rd, 2023"
 const PSI_VALUE = 7625597484987
 const GRAHAMS_VALUE = 109
-const BHO_VALUE = 48630661836227112960n
+const BHO_VALUE = 48630661836227112960
 function getDefaultObject() {
     return {
         nav: {current:"ord", last:"ord"},
@@ -15,11 +17,15 @@ function getDefaultObject() {
         boost: {amt:0, total:0, times:0, hasBUP:Array(12).fill(false), isCharged:Array(12).fill(false), unlocks: Array(4).fill(false)},
         chal: {decrementy: 1, html: -1, completions: Array(8).fill(0), active: Array(8).fill(false), totalCompletions: 0},
         incrementy: {amt:0, hasIUP:Array(9).fill(false), rebuyableAmt: Array(3).fill(0), rebuyableCosts: [20, 1000, 100], charge:0, totalCharge:0},
+        hierachies: { ords:[ {ord:1, over:0, base:10, type:"f"}, {ord:1, over:0, base:10, type:"g"} ], rebuyableAmt: Array(6).fill(0), hasUpgrade: Array(6).fill(false)},
+        overflow: {bp:1, oc:1},
         autoStatus: {enabled: [false, false]},
-        sToggles: Array(6).fill(true),
+        sToggles: Array(7).fill(true),
         successorClicks: 0,
         lastTick: 0,
         achs: [],
+        loadedVersion: "null",
+        offline: true
     }
 }
 let data = getDefaultObject()
@@ -34,14 +40,20 @@ function save(){
 function load() {
     let savedata = JSON.parse(window.localStorage.getItem('ordinalPRINGLESsave'))
     if (savedata !== undefined) fixSave(data, savedata)
-    fixOldSaves()
+    const extra = fixOldSaves()
     loadHTML()
-    createAlert('Welcome Back!', `You've loaded into Ordinal PRINGLES v${VERSION}\nEnjoy!`, 'Thanks!')
+    createAlert('Welcome Back!', `You've loaded into Ordinal PRINGLES v${VERSION}: ${VERSION_NAME}\nEnjoy!`, 'Thanks!')
+
+    return extra
 }
 function loadHTML(){
     if(data.markup.shifts === 7 || data.chal.active[4]) DOM('dynamicTab').addEventListener('click', _=> switchMarkupTab('dynamic'))
     if(data.boost.total >= 6) DOM('chalTab').addEventListener('click', _=> switchBoostTab('chal'))
-    if(data.boost.total >= 105) DOM('incrementyTab').addEventListener('click', _=> switchBoostTab('incrementy'))
+    if(data.boost.total >= 91) DOM('incrementyTab').addEventListener('click', _=> switchBoostTab('incrementy'))
+    if(data.boost.total >= 325) DOM('hierarchiesTab').addEventListener('click', _=> switchBoostTab('hierarchies'))
+    if(data.boost.total >= 465) DOM('overflowTab').addEventListener('click', _=> switchBoostTab('overflow'))
+
+    DOM('progressBarContainer').style.display = data.sToggles[6] ? 'flex' : 'none'
 }
 //fix saves
 function fixSave(main=getDefaultObject(), data) {
@@ -60,6 +72,15 @@ function fixSave(main=getDefaultObject(), data) {
     else return getDefaultObject()
 }
 function fixOldSaves(){
+    let extra = false
+
+    //v0.0.5 => v0.0.6+
+    if (data.loadedVersion == "null"){
+        if (data.chal.completions[6] > 0) data.chal.completions[6] = 0
+        if (data.chal.completions[7] > 0) data.chal.completions[7] = 0
+        extra = true
+    }
+    if (data.offline != true && data.offline != false) data.offline = true
     // v0.0.4 => v0.0.5+
     if (data.chal.completions[0] > 0 && data.chal.totalCompletions == 0){
         for (let i = 0; i < data.chal.completions.length; i++) {
@@ -73,6 +94,23 @@ function fixOldSaves(){
     }
     if(data.dy.level > data.dy.cap) data.dy.level = data.dy.cap
     if(data.ord.isPsi && data.ord.ordinal > GRAHAMS_VALUE && data.boost.times === 0) data.ord.ordinal = GRAHAMS_VALUE
+
+    return extra
+}
+function fixOldSavesP2(){
+    //v0.0.5 => v0.0.6+
+    if (data.loadedVersion == "null"){
+        data.loadedVersion = "0.0.6"
+
+        if (data.boost.times > 30) {
+            boosterRefund()
+            data.boost.times = 30
+            data.boost.total = 465
+            data.boost.amt = 465
+        } 
+
+        createAlert('Nerfed :(', `It looks like you had a v0.0.5 save that was beyond endgame. If you had any C7 or C8 completions they have been reset, and if you had more than 30 Factor Boosts you have been reset to 30. Also, Factor Boosts beyond 30 now have a greatly increased requirement!`, 'Onwards!')
+    } 
 }
 function exportSave(){
     try {

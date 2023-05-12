@@ -36,7 +36,7 @@ function numToRoman(num) {
 function checkAllIndexes(array, value) {
     let indexes = 0
     for(let i = 0; i < array.length; i++){ if (array[i] === value) indexes++ }
-    return D(indexes)
+    return indexes
 }
 
 function switchTab(tab){
@@ -47,6 +47,11 @@ function switchTab(tab){
 }
 
 function settingsToggle(i){
+    if (i == -1){
+        data.offline = !data.offline
+        DOM(`offlineProgressToggle`).innerText = `Toggle Offline Progress [${boolToReadable(data.offline)}]`
+        return save()
+    }
     data.sToggles[i] = !data.sToggles[i]
     save()
     location.reload()
@@ -55,3 +60,5 @@ function settingsToggle(i){
 function allEqual(arr, i){
     return arr.every( v => v === i )
 }
+
+let boostersAtGivenFB = (i = data.boost.times) => i > 0 ? (i*(i+1))/2 : 0
