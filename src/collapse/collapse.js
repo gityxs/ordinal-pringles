@@ -1,6 +1,7 @@
 let collapseTab = "cardinals"
 function switchCollapseTab(t){
     if(isTabUnlocked(t)){
+        if(t === "autoPrestige") updateAutoPrestigeHTML()
         DOM(`${collapseTab}SubPage`).style.display = `none`
         DOM(`${t}SubPage`).style.display = `flex`
 
@@ -13,12 +14,18 @@ function updateCollapseHTML(){
     DOM(`collapseButton`).innerText = `Collapse for ${format(cardinalGain())} Cardinals`
 
     for (let i = 0; i < data.collapse.hasCUP.length; i++) {
-        if(data.collapse.hasCUP[i]) DOM(`cup${i}`).innerText = `${cupData[i].text}\n\nCurrently: ${i==1?'^':''}${format(cupData[i].effect()*drainEffect(i))}${i!=1?'x':''}`
+        if(data.collapse.hasCUP[i]) DOM(`cup${i}`).innerText = `${cupData[i].text}\n\nCurrently: ${i==1?'^':''}${i===1 ? format(cupData[i].effect()+drainEffect(i)) : format(cupData[i].effect()*drainEffect(i))}${i!==1?'x':''}`
     }
 
     DOM("collapseButton").style.color = data.ord.isPsi && data.ord.ordinal >= BHO_VALUE ? '#fff480' : '#20da45'
 
     updateDarknessHTML()
+}
+function updateAutoPrestigeHTML(){
+    for (let i = 0; i < data.collapse.apEnabled.length; i++) {
+        DOM(`t3AutoText${i}`).innerHTML = `Your <span style='color: #20da45'>${apData[i].name} AutoPrestiger</span> is clicking the ${apData[i].button} button${apData[i].plural ? 's' : ''} <span style='color: #2da000'>20 times/second</span> ${apData[i].hasReq ? `, but only if ${apData[i].requirement}` : ''}`
+        DOM(`t3AutoToggle${i}`).innerText = `${apData[i].name} AutoPrestiger: ${boolToReadable(data.collapse.apEnabled[i], 'EDL')}`
+    }
 }
 function initAlephs(){
     const container = DOM('alephContainer')
@@ -26,7 +33,7 @@ function initAlephs(){
         let el = document.createElement('t')
         el.className = 'alephText'
         el.id = `aleph${i}`
-        el.innerHTML = `You have <font color='#20da45'><b>${format(data.collapse.alephs[i])} ℵ<sub>${i+1}</sub></b></font>, ${alephData[i].text} <font color='#20da45'><b>${format(alephEffect(i))}x</b></font>`
+        el.innerHTML = `You have <span style='color:#20da45'><b>${format(data.collapse.alephs[i])} ℵ<sub>${i+1}</sub></b></span>, ${alephData[i].text} <span style='color: #20da45'><b>${format(alephEffect(i))}x</b></span>`
         container.append(el)
     }
 }
@@ -78,10 +85,10 @@ function initSluggish(){
 }
 
 function updateAlephHTML(i){
-    DOM(`aleph${i}`).innerHTML = `You have <font color='#20da45'><b>${format(data.collapse.alephs[i])} ℵ<sub>${i+1}</sub></b></font>, ${alephData[i].text} <font color='#20da45'><b>${format(alephEffect(i))}x</b></font>`
+    DOM(`aleph${i}`).innerHTML = `You have <span style='color: #20da45'><b>${format(data.collapse.alephs[i])} ℵ<sub>${i+1}</sub></b></span>, ${alephData[i].text} <span style='color: #20da45'><b>${format(alephEffect(i))}x</b></span>`
 }
 function updateTotalAlephHTML(){
-    DOM(`alephTotal`).innerHTML = `You have <font color='#20da45'><b>${format(getTotalAlephs())} Total ℵ</b></font>, multiplying Cardinal gain by <font color='#20da45'><b>${format(alephTotalEffect())}x</b></font>`
+    DOM(`alephTotal`).innerHTML = `You have <span style='color: #20da45'><b>${format(getTotalAlephs())} Total ℵ</b></span>, multiplying Cardinal gain by <span style='color: #20da45'><b>${format(alephTotalEffect())}x</b></span>`
 }
 function updateUnlockHTML(mode, i){
     switch (mode) {
@@ -130,15 +137,21 @@ function checkAllUnlocks(mode, prev = false){
 }
 function checkCollapseUnlockHTML(){
     DOM('darkTab').innerText = data.collapse.hasSluggish[2] ? 'Darkness' : '???'
-    DOM('t2AutoText2').style.display = data.collapse.hasSluggish[2] ? 'flex' : 'none'
-    DOM('t2AutoText3').style.display = data.collapse.hasSluggish[2] ? 'flex' : 'none'
-    DOM('auto4').style.display = data.collapse.hasSluggish[2] ? 'flex' : 'none'
-    DOM('auto5').style.display = data.collapse.hasSluggish[2] ? 'flex' : 'none'
+    DOM('autoPrestigeTab').innerText = data.collapse.hasSluggish[3] ? 'AutoPrestigers' : '???'
+    DOM('t2AutoText2').style.display = data.collapse.hasSluggish[2] ? 'block' : 'none'
+    DOM('t2AutoText3').style.display = data.collapse.hasSluggish[2] ? 'block' : 'none'
+    DOM('t2AutoText4').style.display = data.collapse.hasSluggish[3] ? 'block' : 'none'
+    DOM('auto4').style.display = data.collapse.hasSluggish[2] ? 'block' : 'none'
+    DOM('auto5').style.display = data.collapse.hasSluggish[2] ? 'block' : 'none'
+    DOM('auto6').style.display = data.collapse.hasSluggish[3] ? 'block' : 'none'
 }
 
 let cardinalGain = () => data.boost.times < 34 ? 0 : (((Math.sqrt(data.boost.times-34) * Math.log2((data.boost.times-34)+2))*Math.sqrt(data.boost.times-34))+3)*alephTotalEffect()
 let alephEffect = (i) => data.collapse.alephs[i] > 0 ? alephData[i].effect()*cupEffect(6) : 1
-let cupEffect = (i) => data.collapse.hasCUP[i] ? Math.max(cupData[i].effect()*drainEffect(i), 1) : 1
+let cupEffect = (i) => data.collapse.hasCUP[i] ?
+    i===1 ? Math.max(cupData[i].effect()+drainEffect(i), 1)
+    : Math.max(cupData[i].effect()*drainEffect(i), 1)
+    : 1
 
 function getTotalAlephs(){
     let total = 0
@@ -154,17 +167,17 @@ let alephData = [
     {text: "multiplying Autobuyers by", effect: ()=> Math.log10(10+(90*data.collapse.alephs[1]))},
     {text: "multiplying Ordinal Power gain by", effect: ()=> Math.log2(data.collapse.alephs[2]+2)*3},
     {text: "multiplying Incrementy gain by", effect: ()=> Math.pow(data.collapse.alephs[3]+1, 1/4)},
-    {text: "multiplying Dynamic Cap by", effect: ()=> Math.sqrt(data.collapse.alephs[4]+1)*2},
+    {text: "multiplying Dynamic Cap by", effect: ()=> (Math.sqrt(data.collapse.alephs[4]+1)*2)+hupData[9].effect()},
     {text: "multiplying the SGH effect by", effect: ()=> Math.pow(data.collapse.alephs[5]+1, 1/4)},
     {text: "multiplying Booster Power gain by", effect: ()=> Math.sqrt(data.collapse.alephs[6]+4)/2},
-    {text: "multiplying the IUP3 effect by", effect: ()=> Math.sqrt(data.collapse.alephs[7]+4)*2},
+    {text: "multiplying the IUP3 effect by", effect: ()=> (Math.sqrt(data.collapse.alephs[7]+4)*2)+hupData[9].effect()},
 ]
 let cupData = [
     {text: "Total Charge Boosts AutoBuyers", cost: 9, effect: ()=> Math.max(data.incrementy.totalCharge/2, 1)},
     {text: "Square AutoClicker speeds", cost: 27, effect: ()=> 2},
     {text: "Challenges 1-7 provide greatly reduced boosts when at zero completions", cost: 81, effect: ()=> 0.2*8},
     {text: "Ordinal Powers boost AutoBuyers and AutoClickers", cost: 243, effect: ()=> Math.pow(data.markup.powers, 1/256)},
-    {text: "Incrementy boosts its own gain", cost: 2187, effect: ()=> Math.log10(data.incrementy.amt)},
+    {text: "Incrementy boosts its own gain", cost: 2187, effect: ()=> Math.max(1, Math.log10(data.incrementy.amt))}, //TODO: Add a safety function
     {text: "Unlock a 3rd Overcharge Effect and boost Overcharge's 1st Effect", cost: 196608, effect: ()=> 3},
     {text: "Unspent Cardinals boost Alephs", cost: 3e9, effect: ()=> Math.log2(data.collapse.cardinals)},
     {text: "Gain 1% of best Cardinals gained on Collapse every second", cost: 4e13, effect: ()=> 1},
@@ -173,9 +186,12 @@ let sluggishData = [
     {text: "Uncap the Ordinal, gain 1% of Ordinal Powers gained on Markup every second and you always have one free Maximize and Successor AutoClicker", req: 34},
     {text: "Keep Challenges and Incrementy unlocked through Collapse", req: 29},
     {text: "Unlock an AutoBuyer for Charge, an AutoBuyer for RUP1-3, and Unlock Darkness", req: 24},
-    {text: "???"/*"Unlock an AutoBuyer for Repeatable Hierarchy Upgrades, AutoPrestigers for Factor Shift and Factor Boost, you can bulk complete Challenges, and unlock 4 new Hierarchy Upgrades"*/, req: 12},
-    {text: "???"/*"Unlock a new row of Booster Upgrades, keep Hierarchies unlocked through Collapse, and keep Challenge completions on Collapse"*/, req: 2},
-    {text: "???"/*"Uncap Ordinal Powers, keep UP1-6 and Darkness Upgrades on Collapse, and unlock an AutoBuyer for Booster Upgrades"*/, req: 1},
+    {text: "Unlock an AutoBuyer for Repeatable Hierarchy Upgrades, AutoPrestigers for Factor Shift and Factor Boost, keep UP1-6 and Darkness Upgrades on Collapse, and unlock a new row of Booster Upgrades", req: 12},
+    {text: "Unlock 4 new Hierarchy Upgrades, keep Hierarchies unlocked through Collapse, and keep Challenge completions on Collapse", req: 2},
+]
+let apData = [
+    {name: "Factor Shift", button: "Shift", requirement: "", hasReq: false, plural: false},
+    {name: "Factor Boost", button: "Boost", requirement: "you can\'t get a Sluggish Milestone", hasReq: true, plural: false},
 ]
 
 function collapse(first = false){
@@ -208,8 +224,8 @@ function collapseReset(){
     data.boost.amt = 0
     data.boost.total = 0
     data.boost.times = 0
-    data.boost.hasBUP = Array(12).fill(false)
-    data.boost.isCharged = Array(12).fill(false)
+    data.boost.hasBUP = Array(15).fill(false)
+    data.boost.isCharged = Array(15).fill(false)
     data.boost.unlocks = Array(4).fill(false)
     boosterUnlock()
 
@@ -217,44 +233,39 @@ function collapseReset(){
 
     data.chal.decrementy = D(1)
     data.chal.html = -1
-    data.chal.completions = Array(8).fill(0)
-    data.chal.active = Array(8).fill(0)
-    data.chal.totalCompletions = 0
+    if(!data.collapse.hasSluggish[4]) data.chal.completions = Array(8).fill(0)
+    data.chal.active = Array(8).fill(false)
+    if(!data.collapse.hasSluggish[4]) data.chal.totalCompletions = 0
     updateAllChalHTML()
 
     data.incrementy.amt = 0
-    data.incrementy.hasIUP = Array(9).fill(false)
+    if(data.collapse.hasSluggish[3]){
+        data.incrementy.hasIUP[0] = false
+        data.incrementy.hasIUP[1] = false
+        data.incrementy.hasIUP[2] = false
+    }
+    else { data.incrementy.hasIUP = Array(9).fill(false) }
     data.incrementy.rebuyableAmt = Array(3).fill(0)
     data.incrementy.rebuyableCosts = [20, 1000, 100]
     data.incrementy.charge = 0
     data.incrementy.totalCharge = 0
     updateIncrementyHTML()
-    for (let i = 0; i < data.incrementy.hasIUP.length; i++) {
-        DOM(`iup${i}`).style.color = '#8080FF'
+    if(!data.collapse.hasSluggish[3]){
+        for (let i = 0; i < data.incrementy.hasIUP.length; i++) {
+            DOM(`iup${i}`).style.color = '#8080FF'
+        }
     }
 
-    data.hierachies.ords[0].ord = 1
-    data.hierachies.ords[0].over = 0
-    data.hierachies.ords[0].base = 10
-    data.hierachies.ords[1].ord = 1
-    data.hierachies.ords[1].over = 0
-    data.hierachies.ords[1].base = 10
-    data.hierachies.rebuyableAmt = Array(6).fill(0)
-    data.hierachies.hasUpgrade = Array(6).fill(false)
+    data.hierarchies.ords[0].ord = 1
+    data.hierarchies.ords[0].over = 0
+    data.hierarchies.ords[1].ord = 1
+    data.hierarchies.ords[1].over = 0
+    data.hierarchies.rebuyableAmt = Array(6).fill(0)
+    data.hierarchies.hasUpgrade = Array(10).fill(false)
     updateHierarchiesHTML()
+    updateHierarchyPurchaseHTML()
 
-    data.darkness.darkened = false
-    data.darkness.levels = Array(3).fill(0)
-    data.darkness.negativeCharge = 0
-    data.darkness.drains = Array(7).fill(0)
-    data.darkness.sacrificedCharge = 0
-    data.darkness.totalDrains = 0
-    data.darkness.negativeChargeEnabled = false
-    updateDarknessHTML()
-    updateAllDUPHTML()
-    for (let i = 0; i < drainData.length; i++) {
-        updateDrainHTML(i)
-    }
+    resetDarkness()
 
     data.overflow.bp = 1
     data.overflow.oc = 1
@@ -273,6 +284,7 @@ function collapseCardinals(){
     }
 
     let usedCardinals = Math.floor(data.collapse.cardinals)
+    if (usedCardinals >= 1000) usedCardinals = Math.floor(usedCardinals/8)*8
     data.collapse.cardinals -= usedCardinals
 
     if(usedCardinals < 1000){
@@ -298,5 +310,10 @@ function buyCardinalUpgrade(i){
         data.collapse.cardinals -= cupData[i].cost
         checkUnlocks(0, i)
     }
+}
+
+function toggleT3Auto(i){
+    data.collapse.apEnabled[i] = !data.collapse.apEnabled[i]
+    DOM(`t3AutoToggle${i}`).innerText = `${apData[i].name} AutoPrestiger: ${boolToReadable(data.collapse.apEnabled[i], 'EDL')}`
 }
 

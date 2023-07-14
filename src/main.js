@@ -6,9 +6,9 @@ function mainLoop() {
     let uDiff = diff/1000
 
     if(data.dy.gain > 0 && data.dy.level < data.dy.cap) data.dy.level = Math.min(data.dy.cap, data.dy.level+uDiff*dyGain())
-    if(data.boost.hasBUP[9]) data.markup.powers += bup9Effect()*uDiff
+    if(data.boost.hasBUP[11]) data.markup.powers += bup9Effect()*uDiff
 
-    if(data.chal.active[7]) data.chal.decrementy = data.chal.decrementy.plus(decrementyGain(data.chal.decrementy.times(50)).times(uDiff))
+    if(data.chal.active[7]) data.chal.decrementy = data.chal.decrementy.mul(decrementyGain().pow(uDiff))
 
     if(data.ord.isPsi && data.boost.unlocks[1]) data.incrementy.amt += uDiff*incrementyGain()
     if(data.boost.unlocks[3]) {
@@ -32,6 +32,7 @@ function mainLoop() {
     if (controls["m"].pressed) maximize();
     if (controls["i"].pressed) markup();
     if (controls["f"].pressed) { buyMaxFactor(); buyMaxAuto(); }
+    if (controls["h"].pressed) factorShift();
 
     // Update Achievements
     checkAchs()
@@ -44,7 +45,7 @@ function mainLoop() {
 window.onload = function () {
     let extra = false
     try { extra = load() } catch(e){ console.log('New Save!\nIf you\'re seeing this, welcome :)') }
-
+    console.log(extra)
     uHTML.load()
 
     if(extra) fixOldSavesP2()

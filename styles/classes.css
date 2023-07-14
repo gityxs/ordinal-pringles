@@ -40,8 +40,8 @@
     margin-top: 0.3rem;
 }
 .bup{
-    width: 10rem;
-    height: 5.2rem;
+    width: 12rem;
+    height: 5.5rem;
     border: 2px solid #0000ff;
     color: #8080FF;
     background: black;
@@ -49,8 +49,8 @@
     margin-left: 0.5rem;
 }
 .chargedBUP{
-    width: 10rem;
-    height: 5.2rem;
+    width: 12rem;
+    height: 5.5rem;
     border: 2px solid goldenrod;
     color: goldenrod;
     background: black;
@@ -81,6 +81,15 @@
     min-height: 2rem;
     border: 2px solid #0000ff;
     color: #8080FF;
+    background: black;
+    margin-left: 0.5rem;
+}
+.automation3{
+    margin-top: 1rem;
+    width: 10rem;
+    min-height: 2rem;
+    border: 2px solid #2da000;
+    color: #20da45;
     background: black;
     margin-left: 0.5rem;
 }
@@ -119,7 +128,7 @@
 .hierarchies{
     font-family: DosisLight;
     font-size: 2rem;
-    color: #8080FF; 
+    color: #8080FF;
 }
 .hb0{
     width: 15rem;
@@ -168,7 +177,7 @@
     margin-left: 0.3rem;
     background: black;
     border: 2px solid #2da000;
-    color: #20da45; 
+    color: #20da45;
 }
 .alephText{
     color: white;

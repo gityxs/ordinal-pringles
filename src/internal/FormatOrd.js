@@ -10,7 +10,7 @@ const ordMarks = [
     "&psi;(Ω<sup>Ω2+1</sup>x)",
     "&psi;(Ω<sup>Ω2+2</sup>x)",
     "&psi;(Ω<sup>Ω2+y</sup>)",
-    "&psi;(Ω<sup>Ωy</sup>x)",
+    "&psi;(Ω<sup>Ωy</sup>)",
     "&psi;(Ω<sup>Ω<sup>2</sup></sup>x)",
     "&psi;(Ω<sup>Ω<sup>2</sup>+1</sup>x)",
     "&psi;(Ω<sup>Ω<sup>2</sup>+2</sup>x)",
@@ -63,6 +63,46 @@ function makeExcessOrdMarks(){
         ordMarks.push(ordMarks[i].slice(0,6)+"Ω<sub>2</sub>&psi;<sub>1</sub>(Ω<sub>2</sub>&psi;<sub>1</sub>(Ω<sub>2</sub>"+ordMarks[i].slice(6)+"))")
     }
     ordMarks.push("&psi;(Ω<sub>2</sub><sup>2</sup>)")
+
+    // POST W_2^2
+
+    // Generates OrdMarks up to BHO*3^164
+    for (let i = 0; i < length; i++) {
+        ordMarks.push(ordMarks[i].slice(0, 6)+"Ω<sub>2</sub><sup>2</sup>"+ordMarks[i].slice(6))
+    }
+    ordMarks.push("&psi;(Ω<sub>2</sub><sup>2</sup>&psi;<sub>1</sub>(Ω<sub>2</sub>)x)")
+
+    // Generates OrdMarks up to BHO*3^205
+    for (let i = 0; i < length; i++) {
+        ordMarks.push(ordMarks[i].slice(0,6)+"Ω<sub>2</sub><sup>2</sup>&psi;<sub>1</sub>(Ω<sub>2</sub>"+ordMarks[i].slice(6)+")")
+    }
+    ordMarks.push("&psi;(Ω<sub>2</sub><sup>2</sup>&psi;<sub>1</sub>(Ω<sub>2</sub>&psi;<sub>1</sub>(Ω<sub>2</sub>x)))")
+
+    // Generates OrdMarks up to BHO*3^246
+    for (let i = 0; i < length; i++) {
+        ordMarks.push(ordMarks[i].slice(0,6)+"Ω<sub>2</sub><sup>2</sup>&psi;<sub>1</sub>(Ω<sub>2</sub>&psi;<sub>1</sub>(Ω<sub>2</sub>"+ordMarks[i].slice(6)+"))")
+    }
+    ordMarks.push("&psi;(Ω<sub>2</sub><sup>2</sup>&psi;<sub>1</sub>(Ω<sub>2</sub><sup>2</sup>)")
+
+    // Generates OrdMarks up to BHO*3^287
+    for (let i = 0; i < length; i++) {
+        ordMarks.push(ordMarks[i].slice(0, 6)+"Ω<sub>2</sub><sup>2</sup>&psi;<sub>1</sub>(Ω<sub>2</sub><sup>2</sup>"+ordMarks[i].slice(6)+")")
+    }
+    ordMarks.push("&psi;(Ω<sub>2</sub><sup>2</sup>&psi;<sub>1</sub>(Ω<sub>2</sub><sup>2</sup>&psi;<sub>1</sub>(Ω<sub>2</sub>x)))")
+
+    // Generates OrdMarks up to BHO*3^328
+    for (let i = 0; i < length; i++) {
+        ordMarks.push(ordMarks[i].slice(0,6)+"Ω<sub>2</sub><sup>2</sup>&psi;<sub>1</sub>(Ω<sub>2</sub><sup>2</sup>&psi;<sub>1</sub>(Ω<sub>2</sub>"+ordMarks[i].slice(6)+"))")
+    }
+    ordMarks.push("&psi;(Ω<sub>2</sub><sup>2</sup>&psi;<sub>1</sub>(Ω<sub>2</sub><sup>2</sup>&psi;<sub>1</sub>(Ω<sub>2</sub>&psi;<sub>1</sub>(Ω<sub>2</sub>x))))")
+
+    // Generates OrdMarks up to BHO*3^369
+    for (let i = 0; i < length; i++) {
+        ordMarks.push(ordMarks[i].slice(0,6)+"Ω<sub>2</sub><sup>2</sup>&psi;<sub>1</sub>(Ω<sub>2</sub><sup>2</sup>&psi;<sub>1</sub>(Ω<sub>2</sub>&psi;<sub>1</sub>(Ω<sub>2</sub>"+ordMarks[i].slice(6)+")))")
+    }
+    ordMarks.push("&psi;(Ω<sub>2</sub><sup>ω</sup>)")
+
+    // FOR FUTURE REFERENCE: Maximum Safe BHO*3 exponent is 604
 }
 
 function displayOrd(ord,over,base,trim = data.ord.trim) {
@@ -72,7 +112,7 @@ function displayOrd(ord,over,base,trim = data.ord.trim) {
     over = Math.floor(over)
     if(trim <= 0) return `...`
     if(ord < base) return ord+over
-    const magnitude = Math.floor(Math.log(ord)/Math.log(base))
+    const magnitude = Math.floor(Math.log(ord)/Math.log(base)+1e-14)
     const magnitudeAmount = base**magnitude
     const amount = Math.floor(ord/magnitudeAmount)
     let finalOutput = "&omega;"
@@ -85,11 +125,12 @@ function displayOrd(ord,over,base,trim = data.ord.trim) {
 }
 
 function displayHierarchyOrd(ord,over,base,trim = data.ord.trim) {
+    if (ord === Infinity) return data.gword ? "<img src='https://cdn.discordapp.com/emojis/967188082434662470.webp?size=24'>" : "Ω"
     ord = Math.floor(ord)
     over = Math.floor(over)
     if(trim <= 0) return `...`
     if(ord < base) return ord+over
-    const magnitude = Math.floor(Math.log(ord)/Math.log(base))
+    const magnitude = Math.floor(Math.log(ord)/Math.log(base)+1e-14)
     const magnitudeAmount = base**magnitude
     const amount = Math.floor(ord/magnitudeAmount)
     let finalOutput = "&omega;"
@@ -97,6 +138,8 @@ function displayHierarchyOrd(ord,over,base,trim = data.ord.trim) {
     if (amount > 1) finalOutput += amount
     const firstAmount = amount*magnitudeAmount
     if(ord-firstAmount > 0) finalOutput += "+" + displayHierarchyOrd(ord-firstAmount, over, base, trim - 1)
+    if(data.gword) finalOutput = finalOutput.replaceAll("&omega;","<img src='https://cdn.discordapp.com/emojis/853002327362895882.webp?size=24'>")
+                                            .replaceAll("ω","<img src='https://cdn.discordapp.com/emojis/853002327362895882.webp?size=24'>")
     return finalOutput
 }
 
@@ -117,8 +160,16 @@ function displayHierarchyOrd(ord,over,base,trim = data.ord.trim) {
 
 function displayPsiOrd(ord, trim) {
     ord = Math.floor(ord)
-    if(ord == BHO_VALUE) return "&psi;(Ω<sub>2</sub>)"
-
+    if(ord == BHO_VALUE) {
+        let finalOutput = "&psi;(Ω<sub>2</sub>)"
+        if(data.gword) finalOutput=finalOutput
+            .replaceAll("Ω","<img src='https://cdn.discordapp.com/emojis/967188082434662470.webp?size=24'>")
+        return `${finalOutput}`
+    }
+    let maxOrdMarks = (3**(ordMarks.length-1))*4
+    if(maxOrdMarks < Infinity && new Decimal(ord).gt(new Decimal(maxOrdMarks.toString()))) {
+        return displayPsiOrd(maxOrdMarks) + "x" + format(ord/Number(maxOrdMarks),2)
+    }
     if(ord === 0) return ""
     if(trim <= 0) return "..."
     if(ord < 4) return extraOrdMarks[ord]

@@ -28,8 +28,7 @@ function updateAllDarknessControlHTML(){
 }
 
 function updateDUPHTML(i){
-    if (i===2) return DOM(`dup${i}`).innerText = `${dupData[i].text} (${data.darkness.levels[i]})\n${format(dupData[i].cost())} Decrementy\nCurrently: +${format(dupData[i].effect())}`
-    DOM(`dup${i}`).innerText = `${dupData[i].text} (${data.darkness.levels[i]})\n${format(dupData[i].cost())} Decrementy\nCurrently: ${format(dupData[i].effect())}x`
+    DOM(`dup${i}`).innerText = `${dupData[i].text} (${data.darkness.levels[i]})\n${format(dupData[i].cost())} Decrementy\nCurrently: ${format(dupEffect(i))}x`
 }
 function updateAllDUPHTML(){
     for (let i = 0; i < data.darkness.levels.length; i++) {
@@ -51,11 +50,13 @@ function negativeChargeEffect(eff){
 
 let sacrificedChargeEffect = () => data.darkness.sacrificedCharge > 0 ? (data.darkness.sacrificedCharge+1)*2 : 1
 
-let drainEffect = (i) => data.darkness.drains[i] > 0 ? Math.max(drainData[i].effect(), 1) : 1
+let drainEffect = (i) => data.darkness.drains[i] > 0 ? i===1 ? Math.max(0, drainData[1].effect())
+    : Math.max(drainData[i].effect(), 1)
+    : i===1 ? 0 : 1
 let drainCost = (i) => (10**(1+(data.darkness.totalDrains/2)))*(data.darkness.drains[i]+1)
 let drainData = [
     { effect: () => 2*data.darkness.drains[0] },
-    { effect: () => 1.1*data.darkness.drains[1] },
+    { effect: () => data.darkness.drains[1] },
     { effect: () => 1.5*data.darkness.drains[2] },
     { effect: () => 2*data.darkness.drains[3] },
     { effect: () => 5*data.darkness.drains[4] },
@@ -64,15 +65,20 @@ let drainData = [
 ]
 
 let dupEffect = (i) => Math.max(1, dupData[i].effect())
+function dupScaling (i){
+    if(i===0) return D(10).pow(D(3).pow(data.darkness.levels[i]+1)).pow(2)
+    if(i===1) return D(10).pow(D(4).pow(data.darkness.levels[i]+1).pow(D(1.5)))
+    if(i===2) return D(10).pow(D(3).pow(data.darkness.levels[i]+1)).pow(3)
+}
 let dupData = [
-    { text: "Multiply AutoBuyer speed by 1.2x", cost: ()=> D(1e30*Math.floor(2*(data.darkness.levels[0]+2/10))).pow((data.darkness.levels[0]+(D(1)))), effect: ()=> 1.2*data.darkness.levels[0] },
-    { text: "Double Dynamic Gain", cost: ()=> D(1e15*Math.floor(2*(data.darkness.levels[1]+2/10))).pow((data.darkness.levels[1]+(D(1)))), effect: ()=> 2*data.darkness.levels[1] },
-    { text: "Add 0.1 to both Hierarchy Effect exponents", cost: ()=> D(1e100*Math.floor(2*(data.darkness.levels[2]+2/10))).pow((data.darkness.levels[2]+(D(1)))), effect: ()=> 0.1*data.darkness.levels[2] }
+    { text: "Multiply AutoBuyer speed by 1.5x", cost: ()=> D(1e30).times(dupScaling(0)).pow(1/getOverflowEffect(5)), effect: ()=> 1.5**data.darkness.levels[0] },
+    { text: "Double Dynamic Cap", cost: ()=> D(1e15).times(dupScaling(1)).pow(1/getOverflowEffect(5)), effect: ()=> 2**data.darkness.levels[1] },
+    { text: "Multiply both Hierarchy Effect exponents by 1.1x", cost: ()=> D(1e100).times(dupScaling(2)).pow(1/getOverflowEffect(5)), effect: ()=> 1.1**data.darkness.levels[2] }
 ]
 
-function buyDrain(i){
-    if(!data.collapse.hasCUP[i]) return createAlert("Failure.", "The Cardinal Upgrade must be purchased before being drained!", "Oops.")
-    if(data.darkness.negativeCharge < drainCost(i)) return createAlert("Failure.", "Insufficient Negative Charge", "Dang.")
+function buyDrain(i) {
+    if (!data.collapse.hasCUP[i]) return createAlert("Failure.", "The Cardinal Upgrade must be purchased before being drained!", "Oops.")
+    if (data.darkness.negativeCharge < drainCost(i)) return createAlert("Failure.", "Insufficient Negative Charge", "Dang.")
 
     data.darkness.negativeCharge -= drainCost(i)
     ++data.darkness.drains[i]
@@ -90,6 +96,7 @@ function buyDUP(i){
         updateDUPHTML(i)
     }
 }
+let getTotalDUPs = () => data.darkness.levels[0]+data.darkness.levels[1]+data.darkness.levels[2]
 
 function darknessControl(mode){
     if(mode===4){
@@ -129,4 +136,20 @@ function darken(force = false){
 
     DOM('darken').innerText = data.darkness.darkened ? 'Enter the Darkness' : 'Escape'
     data.darkness.darkened = !data.darkness.darkened
+}
+
+function resetDarkness(force = false){
+    data.darkness.darkened = false
+    if(!data.collapse.hasSluggish[3]) data.darkness.levels = Array(3).fill(0)
+    data.darkness.negativeCharge = 0
+    data.darkness.drains = Array(7).fill(0)
+    data.darkness.sacrificedCharge = 0
+    data.darkness.totalDrains = 0
+    data.darkness.negativeChargeEnabled = false
+    updateDarknessHTML()
+    updateAllDUPHTML()
+    for (let i = 0; i < drainData.length; i++) {
+        updateDrainHTML(i)
+    }
+    DOM('darken').innerText = data.darkness.darkened ? 'Escape' : 'Enter the Darkness'
 }

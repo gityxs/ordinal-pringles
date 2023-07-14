@@ -88,17 +88,17 @@
         <button class="ordButtons" id="maximize" onclick="maximize()">Maximize Ordinal (M)</button>
     </div>
     <div class="flexBox" id="markupPage" style="flex-direction: column">
-        <h3 class="centeredTexts" id="powersText" style="color: goldenrod;">You have Chips. In your house.</h3>
-        <button id="markupButton" onclick="markup()" style="color: goldenrod; min-width: 20rem; height: 2rem; background-color: black; border: 2px solid #785c13">ω<sup>2</sup> is required to Markup</button>
         <div class="flexBox" style="margin-top: 1rem">
             <button class="tabButton" id="factorTab" onclick="switchMarkupTab('factor')" style="color: goldenrod; border-color: #785c13">Factors</button>
             <button class="tabButton" id="autoTab" onclick="switchMarkupTab('auto')" style="color: goldenrod; border-color: #785c13; width:5.5rem">AutoClickers</button>
             <button class="tabButton" id="dynamicTab" onclick="" style="color: goldenrod; border-color: #785c13">Dynamic</button>
         </div>
+        <h3 class="centeredTexts" id="powersText" style="margin-top: 1rem; color: goldenrod;">You have Chips. In your house.</h3>
+        <button id="markupButton" onclick="markup()" style="color: goldenrod; min-width: 20rem; height: 2rem; background-color: black; border: 2px solid #785c13">ω<sup>2</sup> is required to Markup</button>
         <div class="flexBox" id="factorSubPage" style="margin-top: 1rem; flex-direction: column">
             <div class="flexBox" style="flex-direction: row">
-                <button id="factorShiftButton" onclick="data.sToggles[3]?createConfirmation('Are you sure?', 'Performing a Factor Shift will reduce your Base by 1 and unlock a new Factor, but it will reset your Ordinal, Ordinal Powers, Factors, and Automation!', 'No Way!', 'Yes, lets do this.', factorShift):factorShift()" style="color: goldenrod; width: 20rem; height: 3rem; background-color: black; border: 2px solid #785c13">Preform a Factor Shift</button>
-                <button id="factorBoostButton" onclick="data.sToggles[4]&&(data.collapse.times > 0 || data.boost.times < 33)?createConfirmation('Are you sure?', 'Performing a Factor Boost will reset your Ordinal, Ordinal Powers, Factors, Automation, Base, and Dynamic Factor in exchange for some Boosters!', 'No Way!', 'Yes, lets do this.', boost):boost()" style="margin-left: 0.2rem; color: #8080FF; width: 20rem; min-height: 3rem; background-color: black; border: 2px solid #0000ff; display: none">Preform a Factor Boost</button>
+                <button id="factorShiftButton" onclick="data.sToggles[3]?createConfirmation('Are you sure?', 'Performing a Factor Shift will reduce your Base by 1 and unlock a new Factor, but it will reset your Ordinal, Ordinal Powers, Factors, and Automation!', 'No Way!', 'Yes, lets do this.', factorShift):factorShift()" style="color: goldenrod; width: 20rem; height: 3rem; background-color: black; border: 2px solid #785c13">Perform a Factor Shift</button>
+                <button id="factorBoostButton" onclick="data.sToggles[4]&&(data.collapse.times > 0 || data.boost.times < 33)?createConfirmation('Are you sure?', 'Performing a Factor Boost will reset your Ordinal, Ordinal Powers, Factors, Automation, Base, and Dynamic Factor in exchange for some Boosters!', 'No Way!', 'Yes, lets do this.', boost):boost()" style="margin-left: 0.2rem; color: #8080FF; width: 20rem; min-height: 3rem; background-color: black; border: 2px solid #0000ff; display: none">Perform a Factor Boost</button>
             </div>
             <button class="factor" id="factorMax" onclick="buyMaxFactor()">Max All Factors [F]</button>
             <button class="factor" id="factor0" onclick="buyFactor(0)">Factor 1</button>
@@ -129,13 +129,14 @@
         <div class="flexBox" style="margin-top: 1rem">
             <button class="tabButton" id="upgradeTab" onclick="switchBoostTab('upgrades')" style="color: #8080FF; border-color: #0000ff">Upgrades</button>
             <button class="tabButton" id="auto2Tab" onclick="switchBoostTab('auto2')" style="color: #8080FF; border-color: #0000ff; width: 5.5rem">AutoBuyers</button>
-            <button class="tabButton" id="chalTab" style="color: #8080FF; border-color: #0000ff; width: 5.5rem">Challenges</button>
-            <button class="tabButton" id="incrementyTab" style="color: #8080FF; border-color: #0000ff; width: 5.5rem">Incrementy</button>
-            <button class="tabButton" id="hierarchiesTab" style="color: #8080FF; border-color: #0000ff; width: 5.5rem">Hierarchies</button>
-            <button class="tabButton" id="overflowTab" style="color: #8080FF; border-color: #0000ff; width: 5.5rem">Overflow</button>
+            <button class="tabButton" id="chalTab" style="color: #8080FF; border-color: #0000ff; width: 5.5rem" onclick="if(chalTabUnlocked()) {switchBoostTab('chal');}">Challenges</button>
+            <button class="tabButton" id="incrementyTab" style="color: #8080FF; border-color: #0000ff; width: 5.5rem" onclick="if(incrementyTabUnlocked()) {switchBoostTab('incrementy');}">Incrementy</button>
+            <button class="tabButton" id="hierarchiesTab" style="color: #8080FF; border-color: #0000ff; width: 5.5rem" onclick="if(hierarchiesTabUnlocked()) {switchBoostTab('hierarchies');}">Hierarchies</button>
+            <button class="tabButton" id="overflowTab" style="color: #8080FF; border-color: #0000ff; width: 5.5rem" onclick="if(overflowTabUnlocked()) {switchBoostTab('overflow');}">Overflow</button>
         </div>
         <div class="flexBox" id="upgradesSubPage" style="margin-top: 1rem; flex-direction: column">
             <div class="centeredTexts" id="boosterText">boosteeeeeeeee</div>
+            <div class="centeredTexts" id="boosterTimesText" style="font-size: 0.8rem">boosteeeeeeeee times</div>
             <div class="flexBox" style="flex-direction: row;">
                 <button class="boostTopButton" id="boostRefund" onclick="data.sToggles[0]?createConfirmation('Are you sure?', 'This will reset your Booster Upgrades and return spent Boosters, but it will trigger a Booster Reset!', 'Go back!', 'Go ahead.', boosterRefund)
                 :boosterRefund()">Refund your Booster Upgrades</button>
@@ -151,6 +152,7 @@
                     <button class="bup" id="bu1">Unlock Incrementy<br>Requires: 91 Boosters</button>
                     <button class="bup" id="bu2">Unlock Hierarchies<br>Requires: 325 Boosters</button>
                     <button class="bup" id="bu3">Unlock Overflow<br>Requires: 465 Boosters</button>
+                    <button class="bup" id="bu4">Unlock Singularity<br>Requires: ??? Boosters</button>
                 </div>
             </div>
             <p class="centeredTexts" id="bupBottomText">The Unlockables Column does not consume Boosters</p>
@@ -159,13 +161,20 @@
             <div class="centeredTexts" id="factorText2" style="color: orange; margin-top: 1rem; margin-bottom: 0.5rem">Factorial! Cog</div>
             <div class="centeredTexts" id="t2AutoText0">Your Max All AutoBuyer is clicking the Max All button 0 times/second, but only if you can't Factor Shift</div>
             <div class="centeredTexts" id="t2AutoText1">Your Markup AutoBuyer is clicking the Markup button 0 times/second, but only if you're past Ψ(Ω)</div>
-            <div class="centeredTexts" id="t2AutoText2" style="display:none">Your Markup AutoBuyer is clicking the Markup button 0 times/second, but only if you're past Ψ(Ω)</div>
-            <div class="centeredTexts" id="t2AutoText3" style="display:none">Your Markup AutoBuyer is clicking the Markup button 0 times/second, but only if you're past Ψ(Ω)</div>
-            <div class="flexBox">
+            <div class="flexBox" style="flex-direction: row;">
                 <button class="automation2" id="auto2" onclick="toggleAuto(0)">mall Auto</button>
                 <button class="automation2" id="auto3" onclick="toggleAuto(1)">yes mall Auto</button>
-                <button class="automation2" id="auto4" onclick="toggleAuto(2)" style="display:none">fish Auto</button>
-                <button class="automation2" id="auto5" onclick="toggleAuto(3)" style="display:none">salmon'nt Auto</button>
+            </div>
+            <br>
+            <div class="centeredTexts" id="t2AutoText2" style="display:none">Your Markup AutoBuyer is clicking the Markup button 0 times/second, but only if you're past Ψ(Ω)</div>
+            <div class="centeredTexts" id="t2AutoText3" style="display:none">Your Markup AutoBuyer is clicking the Markup button 0 times/second, but only if you're past Ψ(Ω)</div>
+            <div class="centeredTexts" id="t2AutoText4" style="display:none">Your Markup AutoBuyer is clicking the Markup button 0 times/second, but only if you're past Ψ(Ω)</div>
+            <div class="flexBox" style="flex-direction: column">
+                <div class="flexBox" style="flex-direction: row;">
+                    <button class="automation2" id="auto4" onclick="toggleAuto(2)" style="display:none">fish Auto</button>
+                    <button class="automation2" id="auto5" onclick="toggleAuto(3)" style="display:none">salmon'nt Auto</button>
+                    <button class="automation2" id="auto6" onclick="toggleAuto(4)" style="display:none">salmon't Auto</button>
+                </div>
             </div>
         </div>
         <div class="flexBox" id="chalSubPage" style="display: none; flex-direction: column;">
@@ -240,7 +249,7 @@
                 <t class="overflowText" id="bp4Effect" style="color: goldenrod">1</t>
             </div>
             <div class="flexBox, bpEffectContainer" id="bp5Container" style="display:none">
-                <t class="generalTexts" id="oc2Description">Dividing Darkness Upgrade costs by </t>
+                <t class="generalTexts" id="oc2Description">Dividing Darkness Upgrade cost exponents by </t>
                 <t class="overflowText" id="bp5Effect" style="color: goldenrod">1</t>
             </div>
             <div class="centeredTexts" id="overflowInfo" style="margin-top:1rem">"Excess Boosters" means all Boosters above 435<br>"Excess Charge" means all Charge above 12</div>
@@ -252,6 +261,7 @@
             <button class="collapseTabButton" id="cupsTab" onclick="switchCollapseTab('cUpgrades')">Cardinal Upgrades</button>
             <button class="collapseTabButton" id="smTab" onclick="switchCollapseTab('sluggish')">Sluggish Milestones</button>
             <button class="collapseTabButton" id="darkTab" onclick="switchCollapseTab('darkness')">???</button>
+            <button class="collapseTabButton" id="autoPrestigeTab" onclick="switchCollapseTab('autoPrestige')">???</button>
         </div>
         <h3 class="centeredTexts" id="cardinalsText" style="margin-top: 1rem; color: #20da45;">You have Collapsed Chips. In your house.</h3>
         <button id="collapseButton" onclick="collapse()" style="color: #20da45;; min-width: 20rem; height: 2rem; background-color: black; border: 2px solid #2da000">Collapse</button>
@@ -260,8 +270,9 @@
             <br>
             <div class="flexBox" id="alephContainer" style="flex-direction: column;"></div>
             <br>
-            <t class="generalTexts" id="alephTotal">You have <font color='#20da45'><b>Total ℵ</b></font>, ${alephData[i].text} <font color='#20da45'><b>${format(alephEffect(i))}x</b></font></t>
-            <t class="centeredTexts" style="margin-top: 1rem;">You can <font color='#20da45'>Collapse</font> if you reach &psi;Ω<sub>2</sub> or at any point after Factor Boost 34.<br>You must reach Factor Boost 34 to gain any Cardinals.</t>
+            <t class="generalTexts" id="alephTotal">You have <span style="color: #20da45; "><b>Total ℵ</b></span>, ${alephData[i].text} <span
+                    style="color: #20da45; "><b>${format(alephEffect(i))}x</b></span></t>
+            <t class="centeredTexts" style="margin-top: 1rem;">You can <span style="color: #20da45; ">Collapse</span> if you reach &psi;Ω<sub>2</sub> or at any point after Factor Boost 34.<br>You must reach Factor Boost 34 to gain any Cardinals.</t>
         </div>
         <div class="flexBox" id="cUpgradesSubPage" style="display: none; flex-direction: column;"></div>
         <div class="flexBox" id="sluggishSubPage" style="display: none; flex-direction: column;">
@@ -285,6 +296,14 @@
             </div>
             <button id="dupC2" onclick="createConfirmation('Are you sure?', 'Sacrificing Charge will not only consume 1 Charge but also remove it from the Total Charge amount!', 'Keep it!', 'Begone!', darknessControl, 2)">Sacrifice Charge</button>
         </div>
+        <div class="flexBox" id="autoPrestigeSubPage" style="display: none; flex-direction: column;">
+            <div class="centeredTexts" id="t3AutoText0" style="margin-top: 1rem">Your Max All AutoBuyer is clicking the Max All button 0 times/second, but only if you can't Factor Shift</div>
+            <div class="centeredTexts" id="t3AutoText1">Your Markup AutoBuyer is clicking the Markup button 0 times/second, but only if you're past Ψ(Ω)</div>
+            <div class="flexBox" style="flex-direction: row;">
+                <button class="automation3" id="t3AutoToggle0" onclick="toggleT3Auto(0)">prinlge mall Auto</button>
+                <button class="automation3" id="t3AutoToggle1" onclick="toggleT3Auto(1)">PRONGLE yes mall Auto</button>
+            </div>
+        </div>
     </div>
     <div class="flexBox" id="achPage" style="flex-direction: column;">
         <p class="centeredTexts" id="achText">Hover over an Achievement to view its information!</p>
@@ -301,9 +320,9 @@
         <button class="settingsButton" id="settingsToggle2" onclick="settingsToggle(2)" style="width: 20rem">aaa</button>
         <button class="settingsButton" id="settingsToggle6" onclick="settingsToggle(6)" style="width: 20rem">aaa</button>
         <button class="settingsButton" id="settingsToggle7" onclick="settingsToggle(7)" style="width: 20rem">aaa</button>
-
-        <button class="settingsButton" id="offlineProgressToggle" onclick="settingsToggle(-1)" style="margin-top: 1rem; width: 20rem">Toggle Offline Progress</button>
+        <button class="settingsButton" id="offlineProgressToggle" onclick="settingsToggle(-1)" style="width: 20rem">Toggle Offline Progress</button>
         <br>
+        <button class="settingsButton" onclick="save()">Manual Save</button>
         <button class="settingsButton" onclick="exportSave()">Export your Save</button>
         <button class="settingsButton" onclick="downloadSave()">Download your Save</button>
         <button class="settingsButton" onclick="createPrompt('Import SaveData', importSave, true)">Import your Save</button>
