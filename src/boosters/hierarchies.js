@@ -1,7 +1,7 @@
 function updateHierarchiesHTML(){
     for (let i = 0; i < data.hierarchies.ords.length; i++) {
         DOM(`h${i}Text`).innerHTML =  `${ordinalDisplay(data.hierarchies.ords[i].type, data.hierarchies.ords[i].ord, data.hierarchies.ords[i].over, hierarchyData[i].base(), ordinalDisplayTrim(3), false)} (${hierarchyData[i].base()})`
-        DOM(`h${i}Info`).innerText = `(+${format(hierarchyData[i].gain())}/s), ${hierarchyData[i].text}`
+        DOM(`h${i}Info`).innerText = `(每秒增加 ${format(hierarchyData[i].gain())})，${hierarchyData[i].text}`
         DOM(`h${i}Effect`).innerText = `${format(getHierarchyEffect(i))}`
     }
     updateHierarchyPurchaseHTML()
@@ -12,16 +12,16 @@ function updateHierarchyPurchaseHTML(){
 }
 function updateHBBuyableHTML(i){
     const el = DOM(`hb${i}`)
-    const cost = i < 3 ? 'FGH' : 'SGH'
+    const cost = i < 3 ? '快速增长层级' : '慢速增长层级'
     const ord = i < 3 ? 0 : 1
 
-    if(data.hierarchies.rebuyableAmt[i] >= 3333) return el.innerHTML = `${hbData[i].text} (${formatWhole(data.hierarchies.rebuyableAmt[i])})<br>Maxed!<br>Currently: ${format(hbData[i].effect())}x`
-    el.innerHTML = i === 2 || i===5 ? `${hbData[i].text} (${formatWhole(data.hierarchies.rebuyableAmt[i])})<br>${format(hbData[i].cost())} Incrementy<br>Currently: ${format(hbData[i].effect())}x`
-    : `${hbData[i].text} (${formatWhole(data.hierarchies.rebuyableAmt[i])})<br>${ordinalDisplay('', hbData[i].cost(), 0, 10, ordinalDisplayTrim(), false)} ${cost}<br>Currently: ${format(hbData[i].effect())}x`
+    if(data.hierarchies.rebuyableAmt[i] >= 3333) return el.innerHTML = `${hbData[i].text} (${formatWhole(data.hierarchies.rebuyableAmt[i])})<br>Maxed!<br>当前效果：${format(hbData[i].effect())} 倍`
+    el.innerHTML = i === 2 || i===5 ? `${hbData[i].text} (${formatWhole(data.hierarchies.rebuyableAmt[i])})<br>${format(hbData[i].cost())} 增量<br>当前效果：${format(hbData[i].effect())} 倍`
+    : `${hbData[i].text} (${formatWhole(data.hierarchies.rebuyableAmt[i])})<br>${ordinalDisplay('', hbData[i].cost(), 0, 10, ordinalDisplayTrim(), false)} ${cost}<br>当前效果：${format(hbData[i].effect())} 倍`
 }
 function updateHUPHTML(i){
     const el = DOM(`hup${i}`)
-    const cost = i < 5 ? 'FGH' : 'SGH'
+    const cost = i < 5 ? '快速增长层级' : '慢速增长层级'
     const ord = i < 5 ? 0 : 1
 
     el.innerHTML = `${hupData[i].text}<br>${ordinalDisplay('', hupData[i].cost, 0, 10, ordinalDisplayTrim(), false)} ${cost}<br>`
@@ -35,14 +35,14 @@ function initHierarchies(){
     let columns = [DOM('h0Buyables'), DOM('h1Buyables')]
     let total = 0
     for (let i = 0; i < columns.length; i++) {
-        let cost = i === 0 ? 'FGH' : 'SGH'
+        let cost = i === 0 ? '快速增长层级' : '慢速增长层级'
         for (let n = 0; n < 3; n++) {
             let hb = document.createElement('button')
             hb.className = `hb${i}`
             hb.id = `hb${total}`
 
-            hb.innerHTML = n < 2 ? `${hbData[total].text} (${formatWhole(data.hierarchies.rebuyableAmt[total])})<br>${ordinalDisplay('', hbData[total].cost(), 0, 10/*hierarchyData[i].base()*/, ordinalDisplayTrim(), false)} ${cost}<br>Currently: ${format(hbData[total].effect())}x`
-            : `${hbData[total].text} (${formatWhole(data.hierarchies.rebuyableAmt[total])})<br>${format(hbData[total].cost())} Incrementy<br>Currently: ${format(hbData[total].effect())}x`
+            hb.innerHTML = n < 2 ? `${hbData[total].text} (${formatWhole(data.hierarchies.rebuyableAmt[total])})<br>${ordinalDisplay('', hbData[total].cost(), 0, 10/*hierarchyData[i].base()*/, ordinalDisplayTrim(), false)} ${cost}<br>当前效果：${format(hbData[total].effect())} 倍`
+            : `${hbData[total].text} (${formatWhole(data.hierarchies.rebuyableAmt[total])})<br>${format(hbData[total].cost())} 增量<br>当前效果：${format(hbData[total].effect())} 倍`
 
             columns[i].append(hb)
             ++total
@@ -53,7 +53,7 @@ function initHierarchies(){
     let columns2 = [DOM('h0Upgrades'), DOM('h1Upgrades')]
     let total2 = 0
     for (let i = 0; i < columns.length; i++) {
-        let cost = i === 0 ? 'FGH' : 'SGH'
+        let cost = i === 0 ? '快速增长层级' : '慢速增长层级'
         for (let n = 0; n < 5; n++) {
             let hup = document.createElement('button')
             hup.className = ' hup'
@@ -86,9 +86,9 @@ function checkSpecialHUPs(){
 let effectiveFGH = () => calcOrdPoints(data.hierarchies.ords[0].ord, hierarchyData[0].base(), data.hierarchies.ords[0].over);
 let effectiveSGH = () => calcOrdPoints(data.hierarchies.ords[1].ord, hierarchyData[1].base(), data.hierarchies.ords[1].over);
 let hierarchyData = [
-    { text:"Multiplying Incrementy Gain by", effect: ()=> Decimal.max((Decimal.log10(effectiveFGH().add(1)).times(hbData[1].effect())).pow(dupEffect(2)), 1),
+    { text:"使增量获取数量乘以 ", effect: ()=> Decimal.max((Decimal.log10(effectiveFGH().add(1)).times(hbData[1].effect())).pow(dupEffect(2)), 1),
         gain: ()=> hierarchyGainBases[0]()*hierarchyGainGlobalMults(), base: ()=> 10-sBUP0Effect() },
-    { text:"Dividing Charge Requirement by", effect: ()=> Decimal.max((Decimal.log10(effectiveSGH().add(1)).times(hbData[4].effect()).times(alephEffect(5))).pow((dupEffect(2))+sBUP1Effect()), 1),
+    { text:"使电荷需求除以 ", effect: ()=> Decimal.max((Decimal.log10(effectiveSGH().add(1)).times(hbData[4].effect()).times(alephEffect(5))).pow((dupEffect(2))+sBUP1Effect()), 1),
         gain: ()=> hierarchyGainBases[1]()*hierarchyGainGlobalMults(), base: ()=> 10-sBUP0Effect() }
 ]
 let hierarchyGainBases = [
@@ -102,12 +102,12 @@ let hierarchyCap = () => Infinity
 let getHierarchyEffect = (i) => Decimal.min(hierarchyData[i].effect(), hierarchyCap())
 
 let hbData = [
-    { text:"Boost FGH and SGH gain based on Challenge Completions", cost: ()=> getHBBuyableCost(0), effect: ()=> Math.max(1, Math.sqrt(data.chal.totalCompletions+1)*data.hierarchies.rebuyableAmt[0]) },
-    { text:"Boost FGH effect based on Challenge Completions", cost: ()=> getHBBuyableCost(1), effect: ()=> Math.max(1, Math.log10(data.chal.totalCompletions+1)*data.hierarchies.rebuyableAmt[1]) },
-    { text:"Boost Incrementy Upgrade 3\'s effect based on FGH", cost: ()=> getHBBuyableCost(2), effect: ()=> Math.max(1, Math.pow(data.hierarchies.ords[0].ord+1, 1/16)*data.hierarchies.rebuyableAmt[2]) },
-    { text:"Boost FGH and SGH gain based on Total Boosters", cost: ()=> getHBBuyableCost(3), effect: ()=> Math.max(1, Math.sqrt((data.boost.total+1)/20)*data.hierarchies.rebuyableAmt[3]) },
-    { text:"Boost SGH effect based on Challenge Completions", cost: ()=> getHBBuyableCost(4), effect: ()=> Math.max(1, Math.log10(data.chal.totalCompletions+1)*data.hierarchies.rebuyableAmt[4]) },
-    { text:"Boost Incrementy Upgrade 3\'s effect based on SGH", cost: ()=> getHBBuyableCost(5), effect: ()=> Math.max(1, Math.pow(data.hierarchies.ords[1].ord+1, 1/16)*data.hierarchies.rebuyableAmt[5]) }
+    { text:"使挑战完成次数可以增加快速增长层级和慢速增长层级获取数量", cost: ()=> getHBBuyableCost(0), effect: ()=> Math.max(1, Math.sqrt(data.chal.totalCompletions+1)*data.hierarchies.rebuyableAmt[0]) },
+    { text:"使挑战完成次数可以增加快速增长层级的效果", cost: ()=> getHBBuyableCost(1), effect: ()=> Math.max(1, Math.log10(data.chal.totalCompletions+1)*data.hierarchies.rebuyableAmt[1]) },
+    { text:"使快速增长层级的数量可以增加增量升级3的效果", cost: ()=> getHBBuyableCost(2), effect: ()=> Math.max(1, Math.pow(data.hierarchies.ords[0].ord+1, 1/16)*data.hierarchies.rebuyableAmt[2]) },
+    { text:"使提升器数量可以增加快速增长层级和慢速增长层级获取数量", cost: ()=> getHBBuyableCost(3), effect: ()=> Math.max(1, Math.sqrt((data.boost.total+1)/20)*data.hierarchies.rebuyableAmt[3]) },
+    { text:"使挑战完成次数可以增加慢速增长层级的效果", cost: ()=> getHBBuyableCost(4), effect: ()=> Math.max(1, Math.log10(data.chal.totalCompletions+1)*data.hierarchies.rebuyableAmt[4]) },
+    { text:"使慢速增长层级的数量可以增加增量升级3的效果", cost: ()=> getHBBuyableCost(5), effect: ()=> Math.max(1, Math.pow(data.hierarchies.ords[1].ord+1, 1/16)*data.hierarchies.rebuyableAmt[5]) }
 ]
 let hupData = [
     // Effcects of 1 mean that it is a true/false effect.

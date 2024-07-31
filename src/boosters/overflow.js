@@ -5,16 +5,16 @@
 */
 
 function updateOverflowHTML(){
-    DOM(`boosterText2`).innerText =  `You have ${getExtraBoosters()} Excess Boosters, producing`
-    DOM(`boosterPower`).innerText = ` ${format(getOverflowGain(0))} Booster Power/s`
-    DOM(`bpTotal`).innerText = `Your ${format(data.overflow.bp)} Booster Power is`
+    DOM(`boosterText2`).innerText =  `您拥有 ${getExtraBoosters()} 个超额提升器，每秒产生`
+    DOM(`boosterPower`).innerText = ` ${format(getOverflowGain(0))} 提升器之力`
+    DOM(`bpTotal`).innerText = `您的 ${format(data.overflow.bp)} 提升器之力`
 
-    DOM(`chargeText2`).innerText =  `You have ${getExtraCharge()} Excess Charge, producing`
-    DOM(`overCharge`).innerText = ` ${format(getOverflowGain(1))} Overcharge/s`
-    DOM(`ocTotal`).innerText = `Your ${format(data.overflow.oc)} Overcharge is`
+    DOM(`chargeText2`).innerText =  `您拥有 ${getExtraCharge()} 个超额电荷，每秒产生`
+    DOM(`overCharge`).innerText = ` ${format(getOverflowGain(1))} 过度充电`
+    DOM(`ocTotal`).innerText = `您的 ${format(data.overflow.oc)} 过度充电`
 
     for (let i = 0; i < 8; i++) {
-        DOM(`bp${i}Effect`).innerText = (i===2 && data.overflow.thirdEffect) || i===5 ? `除以${format(getOverflowEffect(i))}` : `${format(getOverflowEffect(i))}倍`
+        DOM(`bp${i}Effect`).innerText = (i===2 && data.overflow.thirdEffect) || i===5 ? `除以 ${format(getOverflowEffect(i))}` : ` ${format(getOverflowEffect(i))} 倍`
     }
 }
 

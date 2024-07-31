@@ -1,16 +1,16 @@
 function updateIncrementyHTML(){
     DOM("incrementyText").innerText = `您拥有 ${format(data.incrementy.amt)} 增量[每秒增加 ${format(incrementyGain())}]，它使自动购买器速度变为原来的 ${format(incrementyMult())} 倍\nYou gain Incrementy based on your Ordinal, but only above Ψ(Ω). You cannot gain Incrementy in Challenges.`;
-    DOM(`iup0`).innerText = `[RUP1] ${iupDesc[0]} (${formatWhole(data.incrementy.rebuyableAmt[0])}+${iup7Effect()})\n${format(getRebuyableCost(0))} Incrementy\n当前效果：${format(iupEffects[0]())}倍`
-    DOM(`iup1`).innerText = `[RUP2] ${iupDesc[1]} (${formatWhole(data.incrementy.rebuyableAmt[1])})\n${format(getRebuyableCost(1))} Incrementy\n当前效果：${format(iupEffects[1]())}倍`
-    DOM(`iup2`).innerText = `[RUP3] ${iupDesc[2]} (${formatWhole(data.incrementy.rebuyableAmt[2])})\n${format(getRebuyableCost(2))} Incrementy\n当前效果：${format(iupEffects[2]())}倍`
-    DOM(`iup9`).innerText = `[RUP4] ${iupDesc[9]} (${formatWhole(data.incrementy.rebuyableAmt[3])})\n${format(getRebuyableCost(3))} Incrementy\n当前效果：${format(iupEffects[9]())}倍`
-    DOM(`iup10`).innerText = `[RUP5] ${iupDesc[10]} (${formatWhole(data.incrementy.rebuyableAmt[4])})\n${format(getRebuyableCost(4))} Incrementy\n当前效果：${format(iupEffects[10]())}倍`
-    DOM(`iup11`).innerText = `[RUP6] ${iupDesc[11]} (${formatWhole(data.incrementy.rebuyableAmt[5])})\n${format(getRebuyableCost(5))} Incrementy\n当前效果：${format(iupEffects[11]())}倍`
-    DOM('chargeButton').innerText = `Sacrifice ${format(chargeReq())} Incrementy for 1 Charge\nYou have ${data.incrementy.charge} Charge (${data.incrementy.totalCharge} total)`
+    DOM(`iup0`).innerText = `[重复升级1]${iupDesc[0]} (${formatWhole(data.incrementy.rebuyableAmt[0])}+${iup7Effect()})\n${format(getRebuyableCost(0))} 增量\n当前效果：${format(iupEffects[0]())}倍`
+    DOM(`iup1`).innerText = `[重复升级2]${iupDesc[1]} (${formatWhole(data.incrementy.rebuyableAmt[1])})\n${format(getRebuyableCost(1))} 增量\n当前效果：${format(iupEffects[1]())}倍`
+    DOM(`iup2`).innerText = `[重复升级3]${iupDesc[2]} (${formatWhole(data.incrementy.rebuyableAmt[2])})\n${format(getRebuyableCost(2))} 增量\n当前效果：${format(iupEffects[2]())}倍`
+    DOM(`iup9`).innerText = `[重复升级4]${iupDesc[9]} (${formatWhole(data.incrementy.rebuyableAmt[3])})\n${format(getRebuyableCost(3))} 增量\n当前效果：${format(iupEffects[9]())}倍`
+    DOM(`iup10`).innerText = `[重复升级5]${iupDesc[10]} (${formatWhole(data.incrementy.rebuyableAmt[4])})\n${format(getRebuyableCost(4))} 增量\n当前效果：${format(iupEffects[10]())}倍`
+    DOM(`iup11`).innerText = `[重复升级6]${iupDesc[11]} (${formatWhole(data.incrementy.rebuyableAmt[5])})\n${format(getRebuyableCost(5))} 增量\n当前效果：${format(iupEffects[11]())}倍`
+    DOM('chargeButton').innerText = `献祭 ${format(chargeReq())} 增量，获得 1 电荷\n您拥有 ${data.incrementy.charge} 电荷 (共 ${data.incrementy.totalCharge} 个)`
 }
 function switchIUPText(i, mode){
-    mode ? DOM(`iup${i}`).innerHTML = `[UP${i-2}] ${iupDesc[i]}<br>Currently: ${format(iupEffects[i]())}`
-    : DOM(`iup${i}`).innerHTML = `[UP${i-2}] ${iupDesc[i]}<br>${format(iupCosts[i])} Incrementy`
+    mode ? DOM(`iup${i}`).innerHTML = `[升级${i-2}]${iupDesc[i]}<br>当前效果：${format(iupEffects[i]())}`
+    : DOM(`iup${i}`).innerHTML = `[升级${i-2}]${iupDesc[i]}<br>${format(iupCosts[i])} 增量`
 }
 
 let incrementyMult = () => Decimal.max(1, Decimal.pow(Decimal.sqrt(data.incrementy.amt).add(10), 1/4).mul(Decimal.pow(data.incrementy.amt, 1/16)).div(negativeChargeEffect(true)))
@@ -25,10 +25,10 @@ function incrementyGain() {
     return otherMults.div(negativeChargeEffect(false))
 }
 
-const iupDesc = ['Double Incrementy Gain', 'Triple Dynamic Gain', 'Dynamic Factor boosts Incrementy gain',
-    'Total Factor Boosts boost Incrementy Gain', 'Incrementy Multiplies the Dynamic Cap at a reduced rate (does not affect C5)', 'Dynamic boosts AutoBuyers at a reduced rate',
-    'Challenge Completions provide free levels of Repeatable Upgrade 1', 'Repeatable Upgrade 2 is boosted by Challenge Completions', 'Total Repeatable Upgrade 3 levels boosts Upgrade 3',
-    'Double Negative Charge gain and Cap', 'Gain a level of the second Darkness Upgrade', 'Boost Cardinal gain'
+const iupDesc = ['使增量获取数量翻倍', '使动态因子获取数量变为 3 倍', '使动态因子可以增加增量获取数量',
+    '使因子提升次数可以增加增量获取数量', '使增量可以增加动态因子上限，只是效果降低(不影响挑战 5)', '使动态因子可以增加自动购买器的效果，只是效果降低',
+    '根据挑战完成次数，获得重复升级1的免费等级', '使挑战完成次数可以增加重复升级2的效果', '使重复升级3的等级可以增加升级3的效果',
+    '使负电荷的获取数量和上限翻倍', '使第 2 个黑暗升级的等级增加 1', '增加基数获取数量'
 ]
 const iupCosts = [1, 1, 1, 2e6, 2e5, 1e10, 3e4, 1e8, 1e12, 1e100, 1e150, 1e200]
 let rebuyableCostBases = [20, 1000, 100, 1e150, 1e150, 1e150]
@@ -44,8 +44,8 @@ function initIUPs(){
             let iup = document.createElement('button')
             iup.className = 'iup'
             iup.id = `iup${total}`
-            iup.innerHTML = r ? `[UP${total-2}] ${iupDesc[total]} (${formatWhole(data.incrementy.rebuyableAmt[total])})<br>${format(getRebuyableCost(total))} Incrementy\nCurrently: ${format(iupEffects[total]())}x`
-            : `[UP${total-2}] ${iupDesc[total]}<br>${format(iupCosts[total])} Incrementy`
+            iup.innerHTML = r ? `[升级${total-2}]${iupDesc[total]} (${formatWhole(data.incrementy.rebuyableAmt[total])})<br>${format(getRebuyableCost(total))} 增量\n当前效果：${format(iupEffects[total]())} 倍`
+            : `[升级${total-2}]${iupDesc[total]}<br>${format(iupCosts[total])} 增量`
             rows[i].append(iup)
             ++total
         }
@@ -78,7 +78,7 @@ function buyRUP(i){
     data.incrementy.amt = data.incrementy.amt.sub(getRebuyableCost(reb))
     ++data.incrementy.rebuyableAmt[reb]
 
-    DOM(`iup${i}`).innerText = `${iupDesc[i]} (${formatWhole(data.incrementy.rebuyableAmt[reb])})\n${format(getRebuyableCost(reb))} Incrementy\nCurrently: ${format(iupEffects[i]())}x`
+    DOM(`iup${i}`).innerText = `${iupDesc[i]} (${formatWhole(data.incrementy.rebuyableAmt[reb])})\n${format(getRebuyableCost(reb))} 增量\n当前效果：${format(iupEffects[i]())} 倍`
 }
 function getTotalIBuyables(){
     let total = 0
@@ -132,7 +132,7 @@ function chargeBUP(i, bottomRow){
 
     if(bottomRow){
         ++data.boost.bottomRowCharges
-        DOM('bupBottomText').innerText = `Click a purchased Upgrade to Supercharge it! The cost to Supercharge a bottom-row Upgrade is currently ${getBottomRowChargeCost()} Charge.\nThe Unlockables Column does not consume Boosters`
+        DOM('bupBottomText').innerText = `点击已购买的升级可以使用电荷来强化它！使用电荷强化底端行的花费为 ${getBottomRowChargeCost()} 电荷。\nThe Unlockables Column does not consume Boosters`
     }
 
     DOM(`bup${i}`).className = 'chargedBUP'
@@ -153,7 +153,7 @@ function respecCharge(c=false){
     }
     data.incrementy.charge = data.incrementy.totalCharge-data.sing.level
     data.boost.bottomRowCharges = 0
-    if(data.collapse.hasSluggish[3]) DOM('bupBottomText').innerText = `Click a purchased Upgrade to Supercharge it! The cost to Supercharge a bottom-row Upgrade is currently ${getBottomRowChargeCost()} Charge.\nThe Unlockables Column does not consume Boosters`
+    if(data.collapse.hasSluggish[3]) DOM('bupBottomText').innerText = `点击已购买的升级可以使用电荷来强化它！使用电荷强化底端行的花费为 ${getBottomRowChargeCost()} 电荷。\nThe Unlockables Column does not consume Boosters`
     if(!c) chalExit()
 }
 

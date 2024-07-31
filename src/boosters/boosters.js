@@ -121,19 +121,19 @@ const autoRequirements = [', but only if you can\'t Factor Shift', ', but only i
 const autoUps = [5, 10]
 function updateBoostersHTML(){
     DOM('boosterText').innerHTML = data.boost.unlocks[1] > 0 ?
-        `You have <span style="color: #8080FF; font-family: DosisSemiBold">${(data.boost.amt)} Boosters</span> (${(data.boost.total)} total) and <span style="color: goldenrod; font-family: DosisSemiBold">${data.incrementy.charge} Charge</span> (${data.incrementy.totalCharge} total)`
-        : `You have <span style="color: #8080FF; font-family: DosisSemiBold">${(data.boost.amt)} Boosters</span> (${(data.boost.total)} total)`
-    DOM('boosterTimesText').innerHTML = `您已经<span style="color: #8080FF">Boosted</span> ${data.boost.times} times`
+        `You have <span style="color: #8080FF; font-family: DosisSemiBold">${(data.boost.amt)} 个提升器</span> (共 ${(data.boost.total)} 个) 和 <span style="color: goldenrod; font-family: DosisSemiBold">${data.incrementy.charge} 个电荷</span> (共 ${data.incrementy.totalCharge} 个)`
+        : `You have <span style="color: #8080FF; font-family: DosisSemiBold">${(data.boost.amt)} 个提升器</span> (共 ${(data.boost.total)} 个)`
+    DOM('boosterTimesText').innerHTML = `您已经<span style="color: #8080FF">Boosted</span> ${data.boost.times} 次`
     //DOM('bup3').innerText = `${bupDesc[3]}\n[${format(bup3Effect())}x]\n53 Boosters`
     //DOM('bup5').innerText = `${data.boost.isCharged[5]?chargedBUPDesc[5]:bupDesc[5]}\n[${format(bup5Effect())}x]\n${data.boost.isCharged[5]?'':bupCosts[5]} Boosters`
     //DOM('bup7').innerText = `${data.boost.isCharged[7]?chargedBUPDesc[7]:bupDesc[7]}\n[${format(bup7Effect())}x]\n${data.boost.isCharged[7]?'':bupCosts[7]} Boosters`
     //DOM('bup11').innerText = `${data.boost.isCharged[11]?chargedBUPDesc[11]:bupDesc[11]}\n[${format(bup11Effect())}x]\n${data.boost.isCharged[11]?'':bupCosts[11]} Boosters`
     for (let i = 0; i < data.autoStatus.enabled.length; i++) {
-        DOM(`t2AutoText${i}`).innerHTML = `Your <span style="color: #80ceff">${autoDisplayNames[i]} AutoBuyer</span> is clicking the ${autoNames[i]} button${i > 2 ? 's' : ''} <span style="color: #8080FF">${i < 2 ? format(t2Auto()) : 20}次</span>${autoRequirements[i]}`
+        DOM(`t2AutoText${i}`).innerHTML = `Your <span style="color: #80ceff">${autoDisplayNames[i]} AutoBuyer</span> is clicking the ${autoNames[i]} button${i > 2 ? 's' : ''} <span style="color: #8080FF">${i < 2 ? format(t2Auto()) : 20} 次</span>${autoRequirements[i]}`
         DOM(`auto${i+2}`).innerText = data.boost.hasBUP[autoUps[i]] || i > 1 ?`${autoDisplayNames[i]} AutoBuyer: ${formatBool(data.autoStatus.enabled[i], 'EDL')}`:`${autoDisplayNames[i]} AutoBuyer: LOCKED`
 
     }
-    DOM("factorText2").innerText = `Your Challenges are multiplying AutoBuyer speed by a total of ${format(chalEffectTotal())}x`
+    DOM("factorText2").innerText = `所有挑战使自动购买器的速度变为 ${format(chalEffectTotal())} 倍`
 
     if(boostTab === 'chal') updateAllChalHTML()
     if(boostTab === 'incrementy') updateIncrementyHTML()
@@ -151,9 +151,9 @@ function updateBoostersHTML(){
 function updateHeaderHTML(){
     const el = DOM(`chalIn`)
     el.style.display = data.chal.active.includes(true) || data.baseless.baseless || inAnyPurification() ? 'block' : 'none'
-    el.innerText = inAnyPurification() ? `The ${purificationData[data.omega.whichPurification].alt} will be Purified`
+    el.innerText = inAnyPurification() ? `${purificationData[data.omega.whichPurification].alt}将被净化`
         : data.baseless.baseless ? `You are in the ${baselessNames[data.baseless.mode]} Realm`
-        : data.chal.active[7] ? `You are in Challenge 8 and there is ${format(data.chal.decrementy)} Decrementy and ${Math.max(1000-data.successorClicks,0)} clicks left` : `You are in Challenge ${data.chal.html+1}` + (data.chal.active[6] ? ` and there is ${Math.max(1000-data.successorClicks,0)} clicks left` : "")
+        : data.chal.active[7] ? `您正在进行挑战 8，减量为 ${format(data.chal.decrementy)}，剩余 ${Math.max(1000-data.successorClicks,0)} 次点击` : `您正在进行挑战 ${data.chal.html+1}` + (data.chal.active[6] ? `，剩余 ${Math.max(1000-data.successorClicks,0)} 次点击` : "")
 }
 
 function updateAllBUPHTML(){

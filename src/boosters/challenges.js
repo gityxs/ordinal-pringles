@@ -45,9 +45,9 @@ function updateAllChalHTML(){
 function updateChalHTML(i){
     DOM(`chal${i}`).style.backgroundColor = data.chal.active[i]?'#002480':data.chal.completions[i]===3?'rgba(0,175,35,0.7)':'black'
     DOM(`chal${i}`).style.color = (!(data.chal.completions[i]===3)||data.chal.active[i])?'#8080FF':'black'
-    DOM(`chal${i}`).innerText = `Challenge ${i+1}\n${chalDesc[i]}\n\nGoal: ${format(chalGoals[i][data.chal.completions[i]])} OP\nReward: Factor ${i+1} slightly boosts Tier 2 Automation\nCompletions: ${data.chal.completions[i]}/3`
-    DOM(`chal1`).innerHTML = `Challenge 2<br>${chalDesc[1]}<br><br>Goal: ${data.chal.completions[1] === 3 ? 'Infinity' : ordinalDisplay('', chalGoals[1][data.chal.completions[1]], 0, 3, data.ord.trim, true, true)}<br>Reward: Factor 2 slightly boosts Tier 2 Automation<br>Completions: ${data.chal.completions[1]}/3`
-    DOM(`chal7`).innerHTML = `Challenge 8<br>${chalDesc[7]}<br><br>Goal: ${format(chalGoals[7][data.chal.completions[7]])} OP<br>Reward: Dynamic Factor slightly boosts Tier 2 Automation<br>Completions: ${data.chal.completions[7]}/3`
+    DOM(`chal${i}`).innerText = `Challenge ${i+1}\n${chalDesc[i]}\n\n目标：${format(chalGoals[i][data.chal.completions[i]])} 序数幂\nReward: Factor ${i+1} slightly boosts Tier 2 Automation\n完成情况：完成 ${data.chal.completions[i]} 次，上限为 3 次`
+    DOM(`chal1`).innerHTML = `Challenge 2<br>${chalDesc[1]}<br><br>目标：${data.chal.completions[1] === 3 ? '无限' : ordinalDisplay('', chalGoals[1][data.chal.completions[1]], 0, 3, data.ord.trim, true, true)}<br>Reward: Factor 2 slightly boosts Tier 2 Automation<br>完成情况：完成 ${data.chal.completions[1]} 次，上限为 3 次`
+    DOM(`chal7`).innerHTML = `Challenge 8<br>${chalDesc[7]}<br><br>目标：${format(chalGoals[7][data.chal.completions[7]])} 序数幂<br>Reward: Dynamic Factor slightly boosts Tier 2 Automation<br>完成情况：完成 ${data.chal.completions[7]} 次，上限为 3 次`
 }
 function chalEnter(i, force=false){
     if((data.chal.completions[i] === 3 || data.chal.active.includes(true)) && !force) return
