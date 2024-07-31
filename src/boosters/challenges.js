@@ -16,10 +16,11 @@ const chalGoals = [
 ]
 
 function initChals(){
-    const rows = [DOM('chalRow0'), DOM('chalRow1'), DOM('chalRow2'), DOM('chalRow3')]
+    const rows = [DOM('chalRow0'), DOM('chalRow1'), DOM('chalRow2')]
     let total = 0
     for (let i = 0; i < rows.length; i++) {
-        for (let n = 0; n < chalDesc.length/4; n++) {
+        for (let n = 0; n < chalDesc.length/3; n++) {
+            if(total === 8) break
             let chal = document.createElement('button')
             chal.className = 'challenge'
             chal.id = `chal${total}`
@@ -30,10 +31,11 @@ function initChals(){
     }
     for (let i = 0; i < data.chal.completions.length; i++) {
         DOM(`chal${i}`).addEventListener('click', ()=>data.sToggles[1]?
-            createConfirmation("Are you sure?", "Entering a Challenge will preform a Booster Reset!", "No chance.", "Of course!", chalEnter, i)
+            createConfirmation("Are you sure?", "Entering a Challenge will perform a Booster Reset!", "No chance.", "Of course!", chalEnter, i)
         :chalEnter(i))
         updateChalHTML(i)
     }
+    updateHeaderHTML()
 }
 function updateAllChalHTML(){
     for (let i = 0; i < data.chal.active.length; i++) {
@@ -41,11 +43,10 @@ function updateAllChalHTML(){
     }
 }
 function updateChalHTML(i){
-    DOM(`chalIn`).style.display = data.chal.active.includes(true)?'block':'none'
-    DOM(`chal${i}`).style.backgroundColor = data.chal.active[i]?'#002480':data.chal.completions[i]===3?'#078228':'black'
+    DOM(`chal${i}`).style.backgroundColor = data.chal.active[i]?'#002480':data.chal.completions[i]===3?'rgba(0,175,35,0.7)':'black'
     DOM(`chal${i}`).style.color = (!(data.chal.completions[i]===3)||data.chal.active[i])?'#8080FF':'black'
     DOM(`chal${i}`).innerText = `Challenge ${i+1}\n${chalDesc[i]}\n\nGoal: ${format(chalGoals[i][data.chal.completions[i]])} OP\nReward: Factor ${i+1} slightly boosts Tier 2 Automation\nCompletions: ${data.chal.completions[i]}/3`
-    DOM(`chal1`).innerHTML = `Challenge 2<br>${chalDesc[1]}<br><br>Goal: ${data.chal.completions[1] == 3 ? 'Infinity' : displayPsiOrd(chalGoals[1][data.chal.completions[1]])}<br>Reward: Factor 2 slightly boosts Tier 2 Automation<br>Completions: ${data.chal.completions[1]}/3`
+    DOM(`chal1`).innerHTML = `Challenge 2<br>${chalDesc[1]}<br><br>Goal: ${data.chal.completions[1] === 3 ? 'Infinity' : ordinalDisplay('', chalGoals[1][data.chal.completions[1]], 0, 3, data.ord.trim, true, true)}<br>Reward: Factor 2 slightly boosts Tier 2 Automation<br>Completions: ${data.chal.completions[1]}/3`
     DOM(`chal7`).innerHTML = `Challenge 8<br>${chalDesc[7]}<br><br>Goal: ${format(chalGoals[7][data.chal.completions[7]])} OP<br>Reward: Dynamic Factor slightly boosts Tier 2 Automation<br>Completions: ${data.chal.completions[7]}/3`
 }
 function chalEnter(i, force=false){
@@ -59,12 +60,10 @@ function chalEnter(i, force=false){
     if(i === 2 || i === 5) data.ord.base = 15
     if(data.boost.hasBUP[2]) data.ord.base = 5
     if(i === 4){
-        createAlert('Forced Refund', `Your Booster Upgrades have been refunded to help with the Challenge. Feel free to rebuy them, but remember the debuff!`, 'Thanks!')
-        boosterRefund(true)
         data.dy.gain = 0.002
-        DOM('dynamicTab').addEventListener('click', _=> switchMarkupTab('dynamic'))
+        //DOM('dynamicTab').addEventListener('click', _=> switchMarkupTab('dynamic'))
     }
-    if(i === 6 || i === 7){
+    if((i === 4 || i === 6 || i === 7) && data.sToggles[10]){
         createAlert('Forced Refund', `Your Booster Upgrades have been refunded to help with the Challenge. Feel free to rebuy them, but remember the debuff!`, 'Thanks!')
         boosterRefund(true)
     }
@@ -73,6 +72,7 @@ function chalEnter(i, force=false){
         updateChalHTML(j)
     }
     data.chal.html = i
+    updateHeaderHTML()
 }
 function chalExit(darkness = false){
     if(data.darkness.darkened && data.chal.active[7] && !darkness) darken(true)
@@ -82,10 +82,11 @@ function chalExit(darkness = false){
     }
     data.chal.html = -1
     boosterReset()
+    updateHeaderHTML()
 }
 //TODO: This exists because of how createConfirmation works. Change it.
 function chalExitConfirm(){
-    if(checkAllIndexes(data.chal.active, true) == 0) return createAlert(`Oops.`, `You have to be in a Challenge to leave it!`, `Sorry :(`)
+    if(checkAllIndexes(data.chal.active, true) === 0) return createAlert(`Oops.`, `You have to be in a Challenge to leave it!`, `Sorry :(`)
     createConfirmation("Are you sure?", "Leaving a Challenge early will force a Booster Reset and you will get no rewards!", "No way!", "Of course!", chalExit)
 }
 function chalComplete(){
@@ -110,11 +111,11 @@ function chalEffectTotal(){
 
     let base = (mult)*hupData[0].effect()*getOverflowEffect(0)
     let cup = data.collapse.hasCUP[2] ? cupEffect(2) : 0
-    return Math.max(base**2+cup, 1)
+    return Math.min(Math.max(base**2+cup, 1), Number.MAX_VALUE)
 }
-function decrementyGain(x) {
-    const exponent = 1+hupData[4].effect()
+function decrementyGain() {
+    const exponent = 1+hupData[4].effect()+getANREffect(2)-singEffects[1].effect()
     const base = D(0.000666).times((D(data.markup.powers+1)).pow(0.2).times(2).pow(exponent))
     const overflow = data.overflow.thirdEffect ? base.div(getOverflowEffect(2)) : base.times(getOverflowEffect(2))
-    return overflow.pow(20) // 20 times per second
+    return (overflow).pow(20) // 20 times per second
 }

@@ -1,7 +1,8 @@
 .flexBox {
     display: flex;
     align-items: center;
-    place-content:center
+    place-content:center;
+    flex-wrap: wrap;
 }
 .generalTexts{
     color: white;
@@ -40,8 +41,8 @@
     margin-top: 0.3rem;
 }
 .bup{
-    width: 12rem;
-    height: 5.5rem;
+    width: 13rem;
+    height: 6rem;
     border: 2px solid #0000ff;
     color: #8080FF;
     background: black;
@@ -49,8 +50,8 @@
     margin-left: 0.5rem;
 }
 .chargedBUP{
-    width: 12rem;
-    height: 5.5rem;
+    width: 13rem;
+    height: 6rem;
     border: 2px solid goldenrod;
     color: goldenrod;
     background: black;
@@ -86,7 +87,7 @@
 }
 .automation3{
     margin-top: 1rem;
-    width: 10rem;
+    width: 13rem;
     min-height: 2rem;
     border: 2px solid #2da000;
     color: #20da45;
@@ -94,8 +95,8 @@
     margin-left: 0.5rem;
 }
 .challenge{
-    width: 20rem;
-    height: 10rem;
+    width: 24rem;
+    height: 12rem;
     border: 2px solid #0000ff;
     color: #8080FF;
     background: black;
@@ -111,7 +112,7 @@
     margin-top: 0.5rem;
 }
 .achievement{
-    width: 5rem;
+    width: 7rem;
     height: 5rem;
     border: 1px solid #464646;
     background: #151515;
@@ -124,6 +125,7 @@
     margin-top: 1rem;
     text-align: center;
     flex-direction: row;
+    flex-wrap: wrap;
 }
 .hierarchies{
     font-family: DosisLight;
@@ -132,25 +134,27 @@
 }
 .hb0{
     width: 15rem;
-    height: 5.5rem;
+    height: 7rem;
     border: 2px solid #4000ff;
     color: #8080FF;
     background: black;
     margin-top: 0.5rem;
     margin-left: 2rem;
+    margin-right: 0.25rem;
 }
 .hb1{
     width: 15rem;
-    height: 5.5rem;
+    height: 7rem;
     border: 2px solid #4000ff;
     color: #8080FF;
     background: black;
     margin-top: 0.5rem;
     margin-right: 2rem;
+    margin-left: 0.25rem;
 }
 .hup{
-    width: 14rem;
-    height: 5rem;
+    width: 17rem;
+    height: 7rem;
     border: 2px solid #a600ff;
     color: #a680ff;
     background: black;
@@ -159,6 +163,7 @@
     margin-top: 0.3rem;
     text-align: center;
     flex-direction: row;
+    flex-wrap: wrap;
 }
 .overflowText{
     color: white;
@@ -172,7 +177,7 @@
     border: 2px solid;
 }
 .collapseTabButton{
-    width: 10rem;
+    width: 9rem;
     height: 1.5rem;
     margin-left: 0.3rem;
     background: black;
@@ -189,12 +194,14 @@
     align-items: center;
     place-content:center;
     flex-direction: row;
+    flex-wrap: wrap;
 }
 .cupContainer{
     display: flex;
     align-items: center;
     place-content: center;
     flex-direction: column;
+    flex-wrap: wrap;
 }
 .cup{
     width: 15rem;
@@ -212,6 +219,15 @@
     color: #9f9fcce1;
     background: black;
     margin-left: 0.5rem;
+}
+#drainReset{
+    width: 15rem;
+    height: 6rem;
+    border: 2px solid #8000ff4d;
+    color: #9f9fcce1;
+    background: black;
+    margin-left: 0.5rem;
+    margin-top: 1rem;
 }
 .sluggish{
     width: 50rem;
@@ -240,8 +256,8 @@
     margin-left: 0.5rem;
 }
 .dup{
-    width: 15rem;
-    height: 5.5rem;
+    width: 17rem;
+    height: 6rem;
     border: 2px solid #8000ff4d;
     color: #9f9fcce1;
     background: black;
@@ -257,13 +273,78 @@
     margin-top: 0.5rem;
     margin-left: 0.5rem;
 }
+.singControl{
+    width: 12rem;
+    height: 3rem;
+    border: 1px solid #2da000;
+    color: #2da000;
+    background: black;
+    font-size: 0.75rem;
+}
+.singFunction{
+    color: darkgray;
+    font-family: DosisLight;
+    text-align: center;
+}
+#baseless{
+    width: 25rem;
+    height: 10rem;
+    border: 2px solid #6d3d00;
+    color: #ae6610;
+    background: black;
+    margin-top: 0.5rem;
+    font-family: DosisSemiBold;
+}
+.anRebuyable{
+    width: 16rem;
+    height: 9rem;
+    border: 2px solid #6d3d00;
+    color: #ae7710;
+    background: black;
+    margin-left: 0.25rem;
+    margin-right: 0.25rem
+}
+.purification{
+    margin-left: 0.5rem;
+    margin-right: 0.5rem;
+    width: 20rem;
+    height: 10rem;
+    color: white;
+    background: black;
+    border: 2px solid #670000;
+}
+.aoRow{
+    display: flex;
+    align-items: center;
+    place-content:center;
+    margin-top: 1rem;
+    flex-wrap: wrap;
+}
+.aoRebuyable{
+    width: 21rem;
+    height: 7rem;
+    border: 2px solid #650000;
+    color: #ce0b0b;
+    background: black;
+    margin-left: 0.25rem;
+    margin-right: 0.25rem
+}
+.aoMilestone{
+    margin-left: 0.5rem;
+    margin-right: 0.5rem;
+    width: 30rem;
+    height: 5rem;
+    border: 2px solid #4b001a;
+    color: #940525;
+    background: black;
+}
 .settingsButton{
     width: 10rem;
-    height: 1.5rem;
-    margin-top: 0.2rem;
+    min-height: 1.5rem;
+    margin-top: 0.5rem;
     color: darkgray;
     background: black;
-    border: 2px solid gray;
+    border: 2px solid rgb(128, 128, 128);
 }
 #ordinal {
     text-overflow: ellipsis;

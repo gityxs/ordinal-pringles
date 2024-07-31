@@ -1,8 +1,8 @@
 function createAlert(name,desc,close) {
     DOM('alertContainer').style.border = `4px solid gray`
-    DOM('alertTitle').innerText = name
-    DOM('alertContent').innerText = desc
-    DOM('closeAlert').innerText = close
+    DOM('alertTitle').innerHTML = name
+    DOM('alertContent').innerHTML = desc
+    DOM('closeAlert').innerHTML = close
     DOM('alert').style.display = 'block'
     DOM('alertContainer').style.display = 'block'
 }
@@ -31,7 +31,7 @@ function createConfirmation(name,desc,no,yes,func,arg) {
     document.getElementById('confirm').style.display = 'block'
     document.getElementById('confirmContainer').style.display = 'block'
     document.getElementById('noConfirm').addEventListener('click', () => {closeModal('confirm')})
-    arg != undefined?document.getElementById('yesConfirm').addEventListener('click', () => {func(arg);closeModal('confirm')})
+    arg !== undefined?document.getElementById('yesConfirm').addEventListener('click', () => {func(arg);closeModal('confirm')})
         :document.getElementById('yesConfirm').addEventListener('click', () => {func();closeModal('confirm')})
 }
 function closeModal(i) {

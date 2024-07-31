@@ -3,19 +3,19 @@
     ALL CREDIT GOES TO ryanleonels ON DISCORD FOR EVERYTHING BEFORE THE "LEGACY" SECTION
     Source: https://ordinal-pringles-dark-mode.glitch.me/src/etc/progressBar.js
 
-
  */
 
 function OPtoOrd(x, b, trim=0) {
-    if (x <= 0.000000000001 || trim >= 12) return 0;
-    if (x >= 1e256 && b==3) return 3**27
-    let exp = Math.floor(Math.log10(x) + 0.000000000001);
+    x = D(x)
+    if (x.lt(0.000000000001) || trim >= 12) return 0;
+    if (x.gte(1e256) && b===3) return 3**27
+    let exp = Decimal.floor(Decimal.log10(x).add(0.000000000001));
     if (validInBase(exp, b)) {
-        let coef = Math.floor(x / 10 ** exp + 0.000000000001);
-        if (coef >= b) return b ** (OPtoOrd(exp, b, trim+1) + 1);
-        return b ** OPtoOrd(exp, b, trim+1) * coef + OPtoOrd(x - coef * 10 ** exp, b, trim+1);
+        let coef = Decimal.floor(x.div(Decimal.pow(10,exp)).add(0.000000000001));
+        if (coef.gte(b)) return Decimal.pow(b,Decimal.add(OPtoOrd(exp, b, trim+1),1));
+        return Decimal.pow(b,OPtoOrd(exp, b, trim+1)).mul(coef).add(OPtoOrd(x.sub(coef.mul(Decimal.pow(10,exp))), b, trim+1));
     } else {
-        return b ** OPtoOrd(exp, b, trim+1);
+        return Decimal.pow(b,OPtoOrd(exp, b, trim+1));
     }
 }
 
@@ -37,7 +37,7 @@ function inNonPsiChallenge() {
 
 function getTargetBoost() {
     if (data.boost.times >= boostLimit()) return data.boost.times
-    return Math.min(data.boost.times + getBulkBoostAmt() - (data.ord.ordinal < boostReq() || !data.sToggles[7] ? 1 : 0), boostLimit() - 1)
+    return Math.min(data.boost.times + getBulkBoostAmt() - (data.ord.ordinal.lt(boostReq()) || !data.sToggles[7] ? 1 : 0), boostLimit() - 1)
 }
 function getTargetOrdinal() {
     if (data.chal.html !== -1) {
@@ -45,33 +45,45 @@ function getTargetOrdinal() {
         if (chalGoal !== Infinity) {
             if (data.chal.html===1) {
                 if (!data.chal.completions[data.chal.html]) chalGoal = 4e256
-                else return chalGoal
+                else return D(chalGoal)
             }
             let currentOP = (data.chal.html === 7 || data.darkness.darkened) ? 0 : data.markup.powers;
-            return OPtoOrd((chalGoal - currentOP) / opMult(), data.ord.base)
+            return D(OPtoOrd((chalGoal - currentOP) / opMult(), data.ord.base))
         }
     }
 
-    if (data.boost.times >= 33 && data.collapse.times === 0) return BHO_VALUE
-    return boostReq(getTargetBoost())
+    if (data.boost.times >= 33 && data.collapse.times === 0) return D(BHO_VALUE)
+    return D(boostReq(getTargetBoost()))
 }
 function getBarPercent(){
-    if((!data.ord.isPsi) && !inNonPsiChallenge()) return 0
-    if (data.ord.isPsi && inNonPsiChallenge()) return 100
-    if(data.ord.ordinal / getTargetOrdinal() * 100 >= 100) return 100
-    return Math.min(100, data.ord.ordinal / getTargetOrdinal() * 100)
+    if((!data.ord.isPsi) && !inNonPsiChallenge()) return D(0)
+    if (data.ord.isPsi && inNonPsiChallenge()) return D(100)
+    if(data.ord.ordinal.div(getTargetOrdinal()).times(100).gte(100)) return 100
+    return Decimal.min(D(100), data.ord.ordinal.div(getTargetOrdinal()).times(100))
 }
 function getTimeEstimate(){
-    if((!data.ord.isPsi) && !inNonPsiChallenge()) return "Unknown... "
-    if (data.ord.isPsi && inNonPsiChallenge()) return "0s"
-    if(getTargetOrdinal() <= data.ord.ordinal)return "0s"
-    let autoSpeed = Math.max(1, (data.ord.isPsi ? t2Auto() : (data.autoLevels[0]+extraT1())*t1Auto()*(data.chal.active[4] ? (1/data.dy.level) : data.dy.level) / data.chal.decrementy.toNumber()))
-    return formatTime(Math.max((getTargetOrdinal()-data.ord.ordinal)/autoSpeed, 0))
+    if(!data.ord.isPsi && !inNonPsiChallenge()) return "未知... "
+    if (data.ord.isPsi && inNonPsiChallenge()) return "0秒"
+
+    if(getTargetOrdinal().lt(data.ord.ordinal))return "0秒"
+    let autoSpeed = Decimal.max(1, (data.ord.isPsi ? t2Auto() : D(data.autoLevels[0]+extraT1()*t1Auto()*(data.chal.active[4] ? (1/data.dy.level) : data.dy.level)).div(data.chal.decrementy)))
+    if (!data.ord.isPsi) {
+        let succSpeed = !data.chal.active[4]
+            ? D(data.autoLevels[0]).add(extraT1()).mul(t1Auto()).mul(data.dy.level).div(data.chal.decrementy)
+            : D(data.autoLevels[0]).add(extraT1()).mul(t1Auto()).div(data.dy.level).div(data.chal.decrementy)
+        let maxSpeed = !data.chal.active[4]
+            ? D(data.autoLevels[1]).add(extraT1()).mul(t1Auto()).mul(data.dy.level).div(data.chal.decrementy)
+            : D(data.autoLevels[1]).add(extraT1()).mul(t1Auto()).div(data.dy.level).div(data.chal.decrementy)
+        autoSpeed = Decimal.max(1, Decimal.min(succSpeed, maxSpeed.mul(data.ord.base)))
+    }
+    return formatTime(Decimal.max((getTargetOrdinal().sub(data.ord.ordinal)).div(autoSpeed), D(0)))
 }
 function updateProgressBar(){
     DOM("progressBar").style.width = Math.min(100, getBarPercent()) + "%"
-    if((!data.ord.isPsi) && !inNonPsiChallenge()) return DOM("progressBar").innerHTML = "???"
-    DOM("progressBar").innerHTML = getBarPercent().toFixed(2) + "%:&nbsp;" + getTimeEstimate().replaceAll(" ","&nbsp;") + "&nbsp;est."
+    if(!data.ord.isPsi && !inNonPsiChallenge()) return DOM("progressBar").innerHTML = "???"
+
+    if(getTargetOrdinal().eq(Infinity)) return DOM("progressBar").innerHTML = "???"
+    DOM("progressBar").innerHTML = getBarPercent().toFixed(2) + "%:&nbsp;约&nbsp;" + getTimeEstimate().replaceAll(" ","&nbsp;") + ""
 }
 
 /* Legacy

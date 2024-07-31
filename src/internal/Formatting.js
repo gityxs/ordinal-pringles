@@ -44,7 +44,8 @@ function format(decimal, precision = 2) {
     decimal = new Decimal(decimal)
         //if (Decimal.isNaN(decimal)) return  '[ERROR]: NaN'
         if (decimal.sign < 0) return "-" + format(decimal.neg(), precision)
-        if (decimal.mag === Number.POSITIVE_INFINITY) return "Infinity"
+        if (decimal.mag === Number.POSITIVE_INFINITY) return "无限"
+        if(decimal.eq(Infinity)) return 'gwa'
         if (decimal.gte("eeee1000")) {
             let slog = decimal.slog()
             if (slog.gte(1e6)) return "F" + format(slog.floor())
@@ -73,11 +74,13 @@ function formatWhole(decimal) {
 }
 
 function formatTime(s) {
-    if (s < 60) return format(s) + "s"
-    else if (s < 3600) return formatWhole(Math.floor(s / 60)) + "m " + format(s % 60) + "s"
-    else if (s < 86400) return formatWhole(Math.floor(s / 3600)) + "h " + formatWhole(Math.floor(s / 60) % 60) + "m " + format(s % 60) + "s"
-    else if (s < 31536000) return formatWhole(Math.floor(s / 86400) % 365) + "d " + formatWhole(Math.floor(s / 3600) % 24) + "h " + formatWhole(Math.floor(s / 60) % 60) + "m " + format(s % 60) + "s"
-    else return formatWhole(Math.floor(s / 31536000)) + "y " + formatWhole(Math.floor(s / 86400) % 365) + "d " + formatWhole(Math.floor(s / 3600) % 24) + "h " + formatWhole(Math.floor(s / 60) % 60) + "m " + format(s % 60) + "s"
+    if (s.gt(Number.MAX_VALUE)) return "永远"
+    s = s.toNumber()
+    if (s < 60) return format(s) + " 秒"
+    else if (s < 3600) return formatWhole(Math.floor(s / 60)) + " 分 " + format(s % 60) + " 秒"
+    else if (s < 86400) return formatWhole(Math.floor(s / 3600)) + " 时 " + formatWhole(Math.floor(s / 60) % 60) + " 分 " + format(s % 60) + " 秒"
+    else if (s < 31536000) return formatWhole(Math.floor(s / 86400) % 365) + " 日 " + formatWhole(Math.floor(s / 3600) % 24) + " 时 " + formatWhole(Math.floor(s / 60) % 60) + " 分 " + format(s % 60) + " 秒"
+    else return formatWhole(Math.floor(s / 31536000)) + " 年 " + formatWhole(Math.floor(s / 86400) % 365) + " 日 " + formatWhole(Math.floor(s / 3600) % 24) + " 时 " + formatWhole(Math.floor(s / 60) % 60) + " 分 " + format(s % 60) + " 秒"
 }
 
 function toPlaces(x, precision, maxAccepted) {
