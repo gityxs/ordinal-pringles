@@ -1,6 +1,6 @@
 function updateDarknessHTML(){
     DOM('nchargeText1').innerText = `您拥有 ${format(data.darkness.negativeCharge)} 负电荷[每秒增加 ${format(negativeChargeGain())}]，它的上限受到增量控制，目前上限为 ${format(negativeChargeCap())}`
-    DOM('nchargeText2').innerText = `Your Negative Charge divides Incrementy gain by /${format(negativeChargeEffect(false))} and Incrementy effect by /${format(negativeChargeEffect(true))}`
+    DOM('nchargeText2').innerText = `负电荷使增量获取数量除以 ${format(negativeChargeEffect(false))}，使增量效果除以 ${format(negativeChargeEffect(true))}`
 }
 
 function updateDarknessControlHTML(mode){
@@ -12,7 +12,7 @@ function updateDarknessControlHTML(mode){
             DOM('dupC1').innerText = `Reset Negative Charge`
             break;
         case 2:
-            DOM('dupC2').innerHTML = `Sacrifice 1 Charge<br>Your <b>${data.darkness.sacrificedCharge}</b> Sacrificed Charge is dividing the Negative Charge effects by <b>/${format(sacrificedChargeEffect())}</b>`
+            DOM('dupC2').innerHTML = `Sacrifice 1 Charge<br>您献祭了 <b>${data.darkness.sacrificedCharge}</b> Sacrificed Charge is dividing the Negative Charge effects by <b>${format(sacrificedChargeEffect())}</b>`
             break;
         case 3:
             DOM('dupC3').innerText = `Reset Sacrificed Charge`
@@ -28,7 +28,7 @@ function updateAllDarknessControlHTML(){
 }
 
 function updateDUPHTML(i){
-    DOM(`dup${i}`).innerText = `${dupData[i].text} (${data.darkness.levels[i]} + ${formatWhole(getExtraDUPLevels(i))})\n${format(dupData[i].cost())} Decrementy\nCurrently: ${format(dupEffect(i))}x`
+    DOM(`dup${i}`).innerText = `${dupData[i].text} (${data.darkness.levels[i]}+${formatWhole(getExtraDUPLevels(i))})\n${format(dupData[i].cost())} 减量\n当前效果：${format(dupEffect(i))} 倍`
 }
 function updateAllDUPHTML(){
     for (let i = 0; i < data.darkness.levels.length; i++) {
@@ -37,7 +37,7 @@ function updateAllDUPHTML(){
 }
 
 function updateDrainHTML(i){
-    DOM(`drain${i}`).innerText = `Drain this Cardinal Upgrade (${data.darkness.drains[i]})\n${format(drainCost(i))} Negative Charge`
+    DOM(`drain${i}`).innerText = `吸取该基数升级 (${data.darkness.drains[i]})\n${format(drainCost(i))} 负电荷`
 }
 
 let negativeChargeGain = () => data.darkness.darkened && data.darkness.negativeChargeEnabled ? Math.max(0, Decimal.log10(data.chal.decrementy.plus(1))/5)*(iup10Effect()) : 0
@@ -71,9 +71,9 @@ function dupScaling (i){
     if(i===2) return D(10).pow(D(3).pow(data.darkness.levels[i]+1)).pow(3)
 }
 let dupData = [
-    { text: "Multiply AutoBuyer speed by 1.5x", cost: ()=> D(1e30).times(dupScaling(0)).pow(1/getOverflowEffect(5)), effect: ()=> (1.5*purificationEffect(0))**(data.darkness.levels[0]+getExtraDUPLevels(0)) },
-    { text: 'Double Dynamic Cap', cost: ()=> D(1e15).times(dupScaling(1)).pow(1/getOverflowEffect(5)), effect: ()=> hasSingFunction(6) ? 4**(data.darkness.levels[1]+getExtraDUPLevels(1)) : 2**data.darkness.levels[1]},
-    { text: "Multiply both Hierarchy Effect exponents by 1.1x", cost: ()=> D(1e100).times(dupScaling(2)).pow(1/getOverflowEffect(5)), effect: ()=> 1.1**(data.darkness.levels[2]+getExtraDUPLevels(2)) }
+    { text: "使自动购买器速度变为 1.5 倍", cost: ()=> D(1e30).times(dupScaling(0)).pow(1/getOverflowEffect(5)), effect: ()=> (1.5*purificationEffect(0))**(data.darkness.levels[0]+getExtraDUPLevels(0)) },
+    { text: '使动态因子上限翻倍', cost: ()=> D(1e15).times(dupScaling(1)).pow(1/getOverflowEffect(5)), effect: ()=> hasSingFunction(6) ? 4**(data.darkness.levels[1]+getExtraDUPLevels(1)) : 2**data.darkness.levels[1]},
+    { text: "使两种层级效果的指数变为 1.1 倍", cost: ()=> D(1e100).times(dupScaling(2)).pow(1/getOverflowEffect(5)), effect: ()=> 1.1**(data.darkness.levels[2]+getExtraDUPLevels(2)) }
 ]
 let extraDUPLevels = [
     () => 0,

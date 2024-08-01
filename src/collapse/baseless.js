@@ -20,20 +20,20 @@ function initANRebuyables(){
 }
 
 function updateAlephNullHTML(){
-    DOM(`alephNull`).innerHTML = `You have <span style="color: red; font-family: DosisSemiBold">${format(data.baseless.alephNull)} ℵ<sub>0</sub></span>, increasing the RUP1 effect base by <span style="color: red; font-family: DosisSemiBold">${format(alephNullEffects[0]())}</span> and providing <span style="color: red; font-family: DosisSemiBold">${format(alephNullEffects[1]())}</span> free levels of the last Darkness Buyable</span><br>Your <span style="color: #80ce0b; font-family: DosisSemiBold">Singularity</span> is multiplying AutoClicker Speed in the Baseless Realms by <span style="color: #80ce0b; font-family: DosisSemiBold">${singBoostToBaseless(true)}x</span>`
+    DOM(`alephNull`).innerHTML = `You have <span style="color: red; font-family: DosisSemiBold">${format(data.baseless.alephNull)} ℵ<sub>0</sub></span>, increasing the RUP1 effect base by <span style="color: red; font-family: DosisSemiBold">${format(alephNullEffects[0]())}</span> and providing <span style="color: red; font-family: DosisSemiBold">${format(alephNullEffects[1]())}</span> free levels of the last Darkness Buyable</span><br>Your <span style="color: #80ce0b; font-family: DosisSemiBold">Singularity</span> is multiplying AutoClicker Speed in the Baseless Realms by <span style="color: #80ce0b; font-family: DosisSemiBold">${singBoostToBaseless(true)} 倍</span>`
 }
 function updateDynamicShiftHTML(){
     DOM(`dynamicShift`).style.display = `${data.baseless.baseless ? 'block' : 'none'}`
     DOM(`baselessMultiplierText`).style.display = `${data.baseless.baseless ? 'block' : 'none'}`
     if(data.baseless.baseless){
         DOM(`dynamicShift`).innerHTML = data.baseless.shifts < 7
-            ? `<span style="font-size: 1rem">Perform a <span style="color: darkred">Dynamic Shift</span> (H)<br>Requires: &omega;<sup>&omega;</sup></span><br>This will unlock Factor ${data.baseless.shifts+1}, perform a Factor Shift reset, multiply your ℵ<sub>0</sub> gain multiplier by ${format(dynamicShiftMultipliers[0](data.baseless.shifts+1))}, multiply your Dynamic gain by ${format(dynamicShiftMultipliers[1](data.baseless.shifts+1))}, and <span style="color: darkred">double your Base</span>`
+            ? `<span style="font-size: 1rem">Perform a <span style="color: darkred">Dynamic Shift</span> (H)<br>Requires: &omega;<sup>&omega;</sup></span><br>This will unlock Factor ${data.baseless.shifts+1}, perform a Factor Shift reset, multiply your ℵ<sub>0</sub> 获取数量倍率变为 ${format(dynamicShiftMultipliers[0](data.baseless.shifts+1))} 倍，使动态因子获取数量变为 ${format(dynamicShiftMultipliers[1](data.baseless.shifts+1))} 倍，且<span style="color: darkred">double your Base</span>`
             : `Perform a <span style="color: darkred; font-size: 1rem"">Dynamic Shift</span><br>The Future Remains Unknown`
-        DOM(`baselessMultiplierText`).innerHTML = `Your ℵ<sub>0</sub> gain multiplier is ${format(getBaselessMult(data.baseless.mode)*dynamicShiftMultipliers[0]())}`
+        DOM(`baselessMultiplierText`).innerHTML = `Your ℵ<sub>0</sub> 获取数量倍率为 ${format(getBaselessMult(data.baseless.mode)*dynamicShiftMultipliers[0]())}`
     }
 }
 function updateANRHTML(i){
-    DOM(`anR${i}`).innerHTML = `<span style="color: #ce5c0b">${anRebuyableData[i].desc} (${formatWhole(data.baseless.anRebuyables[i])})</span><br>Requires: ${format(getANRCost(i))} ℵ<sub>0</sub><br>Currently: ${anRebuyableData[i].symbol !== 'x' ? anRebuyableData[i].symbol : ''}${format(getANREffect(i))}${anRebuyableData[i].symbol === 'x' ? anRebuyableData[i].symbol : ''}`
+    DOM(`anR${i}`).innerHTML = `<span style="color: #ce5c0b">${anRebuyableData[i].desc} (${formatWhole(data.baseless.anRebuyables[i])})</span><br>需：${format(getANRCost(i))} ℵ<sub>0</sub><br>当前效果：${anRebuyableData[i].symbol !== '倍' ? anRebuyableData[i].symbol : ''}${format(getANREffect(i))}${anRebuyableData[i].symbol === '倍' ? anRebuyableData[i].symbol : ''}`
 }
 function checkANRUnlockHTML(){
     for (let i = 0; i < data.baseless.anRebuyables.length; i++) {
@@ -51,7 +51,7 @@ function updateBaselessEnterHTML(id, load=false) {
     }
 
     data.baseless.mode = id
-    DOM(`baseless`).children[2].innerHTML = `<br><br>You will be trapped in <span style="color: darkred">Base ${baselessLocks[id]()}</span> with Dynamic Shifts providing a ${getBaselessMult(id)}x multiplier to ℵ<sub>0</sub> gain`
+    DOM(`baseless`).children[2].innerHTML = `<br><br>You will be trapped in <span style="color: darkred">底数 ${baselessLocks[id]()}</span> with Dynamic Shifts providing a ${getBaselessMult(id)}x multiplier to ℵ<sub>0</sub> gain`
 }
 
 const baselessMultipliers = [2, 100, 10000]
@@ -64,21 +64,21 @@ const baselessNames = ['Baseless', 'Obliterated', 'Forgotten']
 
 const anRebuyableData = [
     {
-        desc: "Cardinals boost AutoClickers while in a Baseless Realm",
+        desc: "在无底之领域中使基数数量可以增加自动点击器的效果",
         eff: () => Math.log10(10+data.collapse.cardinals)*data.baseless.anRebuyables[0],
         costBase: 1e3,
-        symbol: 'x',
+        symbol: '倍',
         unl: () => true
     },
     {
-        desc: "Boost the Singularity boost to AutoClickers while in Baseless Realms",
+        desc: "在无底之领域中增加奇异对自动点击器的加成",
         eff: () => 2*data.baseless.anRebuyables[1],
         costBase: 1e6,
-        symbol: 'x',
+        symbol: '倍',
         unl: () => true
     },
     {
-        desc: "Increase the Decrementy gain exponent",
+        desc: "增加减量获取数量指数",
         eff: () => 0.1*data.baseless.anRebuyables[2],
         costBase: 1e4,
         symbol: '+',
@@ -87,14 +87,14 @@ const anRebuyableData = [
 
     // Unlocked by a Remnant / Beth Omega Milestone
     {
-        desc: "ℵ<sub>0</sub> boosts both Hierarchy Successors",
+        desc: "使 ℵ<sub>0</sub> 可以增加两种层级的后继数增加速度",
         eff: () => Math.sqrt(data.baseless.alephNull)*data.baseless.anRebuyables[3],
         costBase: 1e9,
-        symbol: 'x',
+        symbol: '倍',
         unl: () => hasAOMilestone(4)
     },
     {
-        desc: "Provide a free level of the 1st, 3rd, 4th, and 5th ℵ<sub>&omega;</sub> Rebuyables",
+        desc: "使 ℵ<sub>&omega;</sub> 的第 1、3、4、5 个重复升级获得 1 级免费等级",
         eff: () => data.baseless.anRebuyables[4] > 0 ? data.baseless.anRebuyables[4] : 0,
         costBase: 1e11,
         symbol: '+',
@@ -125,7 +125,7 @@ function baselessControl(){
         data.baseless.shifts = 0
         data.baseless.alephNull += gain
         data.ord.base = 10
-        DOM(`baseless`).children[2].innerHTML = `<br><br>You will be trapped in <span style="color: darkred">Base ${baselessLocks[data.baseless.mode]()}</span> with Dynamic Shifts providing a ${getBaselessMult(data.baseless.mode)}x multiplier to ℵ<sub>0</sub> gain`
+        DOM(`baseless`).children[2].innerHTML = `<br><br>You will be trapped in <span style="color: darkred">底数 ${baselessLocks[data.baseless.mode]()}</span> with Dynamic Shifts providing a ${getBaselessMult(data.baseless.mode)}x multiplier to ℵ<sub>0</sub> gain`
     }
 
     updateDynamicShiftHTML()

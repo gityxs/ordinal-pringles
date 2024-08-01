@@ -1,11 +1,11 @@
 function updateCollapseHTML(){
-    DOM(`cardinalsText`).innerText = `You have ${format(data.collapse.cardinals)} Cardinals`
-    DOM(`collapseButton`).innerText = `Collapse for ${format(cardinalGain())} Cardinals (C)`
+    DOM(`cardinalsText`).innerText = `您拥有 ${format(data.collapse.cardinals)} 基数`
+    DOM(`collapseButton`).innerText = `进行坍缩，并获得 ${format(cardinalGain())} 基数 (C)`
 
     for (let i = 0; i < data.collapse.hasCUP.length-1; i++) {
-        if(data.collapse.hasCUP[i]) DOM(`cup${i}`).innerText = `${cupData[i].text}\n\nCurrently: ${i===1?'^':''}${format(cupEffect(i))}${i!==1?'x':''}`
+        if(data.collapse.hasCUP[i]) DOM(`cup${i}`).innerText = `${cupData[i].text}\n\n当前效果：${format(cupEffect(i))} ${i!==1?'倍':'次方'}`
     }
-    if(data.collapse.hasCUP[7]) DOM(`cup7`).innerText = `${cupData[7].text}\n\nCurrently: ${format(cupEffect(7))}%`
+    if(data.collapse.hasCUP[7]) DOM(`cup7`).innerText = `${cupData[7].text}\n\n当前效果：${format(cupEffect(7))}%`
 
     DOM("collapseButton").style.color = data.ord.isPsi && data.ord.ordinal.gte(BHO_VALUE) ? '#fff480' : '#20da45'
 
@@ -28,7 +28,7 @@ function initAlephs(){
         let el = document.createElement('t')
         el.className = 'alephText'
         el.id = `aleph${i}`
-        el.innerHTML = `You have <span style='color:#20da45'><b>${format(data.collapse.alephs[i])} ℵ<sub>${i+1}</sub></b></span>, ${alephData[i].text} <span style='color: #20da45'><b>${format(alephEffect(i))}x</b></span>`
+        el.innerHTML = `You have <span style='color:#20da45'><b>${format(data.collapse.alephs[i])} ℵ<sub>${i+1}</sub></b></span>, ${alephData[i].text} <span style='color: #20da45'><b>${format(alephEffect(i))} 倍</b></span>`
         container.append(el)
     }
 }
@@ -50,7 +50,7 @@ function initCUPS(){
             let el = document.createElement('button')
             el.className = 'cup'
             el.id = `cup${id}`
-            el.innerText = `${cupData[id].text}\n\n${format(cupData[id].cost)} Cardinals`
+            el.innerText = `${cupData[id].text}\n\n${format(cupData[id].cost)} 基数`
             el.addEventListener("click", ()=>buyCardinalUpgrade(id))
             innerContainer.append(el)
 
@@ -58,7 +58,7 @@ function initCUPS(){
                 let drain = document.createElement('button')
                 drain.className = 'drain'
                 drain.id = `drain${id}`
-                drain.innerText = `Drain this Cardinal Upgrade (${data.darkness.drains[id]})\n${format(drainCost(id))} Negative Charge`
+                drain.innerText = `吸取该基数升级 (${data.darkness.drains[id]})\n${format(drainCost(id))} 负电荷`
                 drain.addEventListener("click", ()=>buyDrain(id))
                 innerContainer.append(drain)
             }
@@ -89,7 +89,7 @@ function initSluggish(){
 }
 
 function updateAlephHTML(i){
-    DOM(`aleph${i}`).innerHTML = `You have <span style='color: #20da45'><b>${format(data.collapse.alephs[i])} ℵ<sub>${i+1}</sub></b></span>, ${alephData[i].text} <span style='color: #20da45'><b>${format(alephEffect(i))}x</b></span>`
+    DOM(`aleph${i}`).innerHTML = `You have <span style='color: #20da45'><b>${format(data.collapse.alephs[i])} ℵ<sub>${i+1}</sub></b></span>, ${alephData[i].text} <span style='color: #20da45'><b>${format(alephEffect(i))} 倍</b></span>`
 }
 function updateAllAlephHTML(){
     for (let i = 0; i < data.collapse.alephs.length; i++) {
@@ -97,7 +97,7 @@ function updateAllAlephHTML(){
     }
 }
 function updateTotalAlephHTML(){
-    DOM(`alephTotal`).innerHTML = `You have <span style='color: #20da45'><b>${format(getTotalAlephs())} Total ℵ</b></span>, multiplying Cardinal gain by <span style='color: #20da45'><b>${format(alephTotalEffect())}x</b></span>`
+    DOM(`alephTotal`).innerHTML = `You have <span style='color: #20da45'><b>${format(getTotalAlephs())} ℵ(所有ℵ相加)</b></span>, multiplying Cardinal gain by <span style='color: #20da45'><b>${format(alephTotalEffect())} 倍</b></span>`
     DOM(`omega2Text`).innerHTML = ordinalDisplay("", BHO_VALUE, 0, 3, data.ord.trim, true, true)
 }
 function updateUnlockHTML(mode, i){
@@ -125,7 +125,7 @@ function checkUnlocks(mode, i, preview = false){
             if(data.boost.times <= sluggishData[i].req && !data.collapse.hasSluggish[i]){
                 data.collapse.hasSluggish[i] = true
                 data.collapse.cardinals += 3*i
-                createAlert("Congratulations!", `You have completed a Sluggish Milestone!\nYour completion has been rewarded with ${3*i} free Cardinals!`, 'Great!')
+                createAlert("Congratulations!", `您获得了一个惯性里程碑！\n您还因此获得了 ${3*i} 免费基数！`, 'Great!')
                 updateUnlockHTML(1, i)
             }
             break;

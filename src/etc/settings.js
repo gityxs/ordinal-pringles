@@ -63,14 +63,14 @@ function changeMs(x){
     if (!x) return
     if (isNaN(Math.floor(x))) return createAlert('Failure', 'Invalid Input.', `Oops.`)
     data.ms = Math.min(Math.max(Math.floor(x),20),1000)
-    DOM(`changeMsInterval`).children[0].innerHTML = `[${data.ms}ms]`
+    DOM(`changeMsInterval`).children[0].innerHTML = `[${data.ms}毫秒]`
     save();
     location.reload();
 }
 
 function loadSettings(){
     DOM(`offlineProgressToggle`).innerHTML = `Toggle Offline Progress ${settingsColor(data.offline)}`
-    DOM(`changeMsInterval`).children[0].innerHTML = `[${data.ms}ms]`
+    DOM(`changeMsInterval`).children[0].innerHTML = `[${data.ms}毫秒]`
     DOM(`gwaifyToggle`).innerHTML = `<img src='./res/emojis/853002327362895882.webp?size=24'> Display ${settingsColor(data.gword.enabled)}`
     DOM(`changeOrdLength`).children[0].innerHTML = `[${data.ord.trim}]`
 

@@ -39,7 +39,7 @@ function switchSubtab(t, mode){
 
         if (t==="upgrades" && data.boost.unlocks[1]){
             DOM('bupBottomText').innerText = data.collapse.hasSluggish[3]
-                ? `Click a purchased Upgrade to Supercharge it! The cost to Supercharge a bottom-row Upgrade is currently ${getBottomRowChargeCost()} Charge.\nThe Unlockables Column does not consume Boosters`
+                ? `点击已购买的升级可以使用电荷来强化它！使用电荷强化底端行的花费为 ${getBottomRowChargeCost()} 电荷。\nThe Unlockables Column does not consume Boosters`
                 : 'Click a purchased Upgrade to Supercharge it!\nThe Unlockables Column does not consume Boosters'
             DOM('chargeRefund').style.display = 'block'
         }
