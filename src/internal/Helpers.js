@@ -19,7 +19,7 @@ function formatBool (bool, mode='OF'){
     if(mode==='EDL') return bool?'Enabled':'Disabled'
     if(mode==='EDT') return bool?'Enable':'Disable'
     if(mode==='UL') return bool?'Unlocked':'Locked'
-    if(mode==='AU') return bool?'Active':'Inactive'
+    if(mode==='AU') return bool?'激活':'未激活'
 }
 
 function numToRoman(num) {

@@ -3,14 +3,14 @@ const purificationData = [
         name: "Eternity",
         alt: "永恒",
         desc: "Each Factor Boost yields only one Booster and Darkness Upgrades are useless",
-        boostDesc: "Boosting the effect base of the first Darkness Upgrade by",
+        boostDesc: "使第 1 个黑暗升级的效果底数变为",
         eff: () => (1+data.omega.bestFBInPurification[0]/1000)*getAOREffect(5)
     },
     {
         name: "Infinity",
         alt: "无限",
         desc: "Alephs except ℵ<sub>1</sub> are useless, Dynamic Factor divides AutoBuyer speed, and RUP2, RUP3, and IUP3 are disabled",
-        boostDesc: "Boosting ℵ<sub>1</sub>, ℵ<sub>2</sub>, and ℵ<sub>8</sub> by",
+        boostDesc: "Boosting ℵ<sub>1</sub>, ℵ<sub>2</sub>, and ℵ<sub>8</sub> 增加",
         eff: () => Math.sqrt(data.omega.bestFBInPurification[1]),
         special: () => inPurification(1) ? data.dy.level : 1
     },
@@ -18,20 +18,20 @@ const purificationData = [
         name: "Obscurity",
         alt: "晦暗",
         desc: "Your Markup AutoBuyer is equivalent to your FGH successor, your Hierarchies cannot grow, and Charge boosts FGH Successor",
-        boostDesc: "Boosting Overcharge gain, Booster Power gain, and both Hierarchy Successors by",
+        boostDesc: "使过度充电、提升器之力和两种层级后继数的获取数量增加",
         eff: () => data.omega.bestFBInPurification[2]/10,
     },
     {
         name: "Inferiority",
         alt: "次级",
         desc: "Incrementy, its upgrades, and Hierarchies are disabled, and Charge cannot be used",
-        boostDesc: "Boosting the first and fifth Cardinal Upgrade by",
+        boostDesc: "使第 1 个和第 5 个基数升级的效果增加",
         eff: () => ((data.omega.bestFBInPurification[3]))*getAOREffect(5)
     }
 ]
 const aoRebuyableData = [
     {
-        desc: "SLIGHTLY boost ℶ<sub>&omega;</sub> gain",
+        desc: "SLIGHTLY boost ℶ<sub>&omega;</sub> 的获取数量",
         eff: () => (1+getAORLevel(0)/10)*getOverflowEffect(6),
         costBase: 50,
         symbol: 'x',
@@ -39,7 +39,7 @@ const aoRebuyableData = [
         extraLevels: () => anRebuyableData[4].eff()
     },
     {
-        desc: "Boost ℵ<sub>&omega;</sub> gain",
+        desc: "Boost ℵ<sub>&omega;</sub> 的获取数量",
         eff: () => getAORLevel(1)/2+1,
         costBase: 25,
         symbol: 'x',
@@ -47,15 +47,15 @@ const aoRebuyableData = [
         extraLevels: () => 0
     },
     {
-        desc: "ℵ<sub>&omega;</sub> divides Dynamic Factor gain while Purification of Infinity is active",
+        desc: "激活无限之净化时 ℵ<sub>&omega;</sub> 可以减少动态因子获取数量",
         eff: () => Math.log10(10+data.omega.alephOmega)*(getAORLevel(2)+1),
         costBase: 125,
-        symbol: '/',
+        symbol: '除以',
         req: () => inPurification(1),
         extraLevels: () => anRebuyableData[4].eff()
     },
     {
-        desc: "Double the amount of Boosters gained in an Eternal Boost",
+        desc: "使永恒之净化中提升器获取数量翻倍",
         eff: () => 2**getAORLevel(3),
         costBase: 150,
         symbol: 'x',
@@ -63,7 +63,7 @@ const aoRebuyableData = [
         extraLevels: () => anRebuyableData[4].eff()
     },
     {
-        desc: "ℵ<sub>&omega;</sub> multiplies AutoBuyer speed while Purification of Obscurity or Inferiority are active",
+        desc: "激活晦暗之净化或次级之净化时 ℵ<sub>&omega;</sub> 可以增加自动购买器的效果",
         eff: () => Math.sqrt(getAOEffect(0))*Math.sqrt(getAORLevel(4)+1),
         costBase: 200,
         symbol: 'x',
@@ -71,7 +71,7 @@ const aoRebuyableData = [
         extraLevels: () => anRebuyableData[4].eff()
     },
     {
-        desc: "ℵ<sub>&omega;</sub> boosts Purification of Inferiority's effects",
+        desc: "ℵ<sub>&omega;</sub> 可以增加次级之净化的奖励效果",
         eff: () => Math.log2(2+data.omega.alephOmega)*(getAORLevel(5)+1),
         costBase: 400,
         symbol: 'x',
@@ -79,7 +79,7 @@ const aoRebuyableData = [
         extraLevels: () => 0
     },
     {
-        desc: "ℵ<sub>&omega;</sub> boosts the second BUP in the second column",
+        desc: "ℵ<sub>&omega;</sub> 可以增加提升器升级2x2的效果",
         eff: () => Math.log10(10+data.omega.alephOmega)*(getAORLevel(6)+1),
         costBase: 300,
         symbol: 'x',
@@ -87,7 +87,7 @@ const aoRebuyableData = [
         extraLevels: () => 0
     },
     {
-        desc: "Boost the last Cardinal Upgrade by +1%",
+        desc: "使最后 1 个基数升级的效果增加 1%",
         eff: () => 1+getAORLevel(7),
         costBase: 600,
         symbol: '+',
@@ -166,7 +166,7 @@ function initAOMilestones(){
             let el = document.createElement('button')
             el.className = 'aoMilestone'
             el.id = `aoM${id}`
-            el.innerHTML = `<span style="color: #c2052c">${aoMilestoneData[id].desc}</span><br>Requires: ${aoMilestoneData[id].req} ℶ<sub>&omega;</sub>`
+            el.innerHTML = `<span style="color: #c2052c">${aoMilestoneData[id].desc}</span><br>需：${aoMilestoneData[id].req} ℶ<sub>&omega;</sub>`
             //el.addEventListener("click", ()=>enterPurification(i))
             row.append(el)
         }
@@ -177,12 +177,12 @@ function initAOMilestones(){
 
 function updatePurificationTabHTML(){
     if(remnantAmt() > data.omega.bestRemnants) data.omega.bestRemnants = remnantAmt()
-    DOM(`alephOmega`).innerHTML = `<span style="font-size: 1.1rem">You have <span style="color: #ce0b0b">${format(data.omega.alephOmega)} ℵ<sub>&omega;</sub></span>, multiplying <span style="color: #ce0b0b">AutoBuyer Speed by ${format(getAOEffect(0))}x</span> and <span style="color: #ce0b0b">ℵ<sub>0</sub> gain by ${format(getAOEffect(1))}x</span></span><br>You have <span style="color: #ce0b0b">${format(remnantAmt())} ℶ<sub>&omega;</sub></span>, producing <span style="color: #ce0b0b">${format(aoGain())} ℵ<sub>&omega;</sub>/s</span> until ℵ<sub>&omega;</sub> reaches ℶ<sub>&omega;</sub>`
-    if(inAnyPurification()) DOM(`purification${data.omega.whichPurification}`).innerHTML = `<span style="color: #ce0b0b">Purification of ${purificationData[data.omega.whichPurification].name}</span><br><span style="color: #ce390b">You will gain ${formatWhole(pureBoostGain())} more Boosts if you exit now (Highest Boost: ${data.omega.bestFBInPurification[data.omega.whichPurification]})</span><br><span style="color: darkred">${purificationData[data.omega.whichPurification].desc}</brspan><br><span style="color: #ce460b">${purificationData[data.omega.whichPurification].boostDesc} ${format(purificationData[data.omega.whichPurification].eff())}x</span>\``
+    DOM(`alephOmega`).innerHTML = `<span style="font-size: 1.1rem">You have <span style="color: #ce0b0b">${format(data.omega.alephOmega)} ℵ<sub>&omega;</sub></span>, multiplying <span style="color: #ce0b0b">自动购买器速度变为 ${format(getAOEffect(0))} 倍</span> and <span style="color: #ce0b0b">ℵ<sub>0</sub> 获取数量变为 ${format(getAOEffect(1))} 倍</span></span><br>You have <span style="color: #ce0b0b">${format(remnantAmt())} ℶ<sub>&omega;</sub></span>, producing <span style="color: #ce0b0b">${format(aoGain())} ℵ<sub>&omega;</sub>/s</span> until ℵ<sub>&omega;</sub> reaches ℶ<sub>&omega;</sub>`
+    if(inAnyPurification()) DOM(`purification${data.omega.whichPurification}`).innerHTML = `<span style="color: #ce0b0b">Purification of ${purificationData[data.omega.whichPurification].name}</span><br><span style="color: #ce390b">如果现在退出，可以使提升增加 ${formatWhole(pureBoostGain())} (最高提升：${data.omega.bestFBInPurification[data.omega.whichPurification]})</span><br><span style="color: darkred">${purificationData[data.omega.whichPurification].desc}</brspan><br><span style="color: #ce460b">${purificationData[data.omega.whichPurification].boostDesc} ${format(purificationData[data.omega.whichPurification].eff())} 倍</span>\``
     updateAllAORHTML()
 }
 function updatePurificationHTML(i){
-    DOM(`purification${i}`).innerHTML = `<span style="color: #ce0b0b">Purification of ${purificationData[i].name}</span><br><span style="color: #ce390b">Highest ${purificationData[i].alt} Boost: <b>${data.omega.bestFBInPurification[i]}</b></span><br><span style="color: darkred">${purificationData[i].desc}</brspan><br><span style="color: #ce460b">${purificationData[i].boostDesc} ${format(purificationData[i].eff())}x</span>`
+    DOM(`purification${i}`).innerHTML = `<span style="color: #ce0b0b">Purification of ${purificationData[i].name}</span><br><span style="color: #ce390b">最高${purificationData[i].alt}提升：<b>${data.omega.bestFBInPurification[i]}</b></span><br><span style="color: darkred">${purificationData[i].desc}</brspan><br><span style="color: #ce460b">${purificationData[i].boostDesc} ${format(purificationData[i].eff())} 倍</span>`
     DOM(`purification${i}`).style.backgroundColor = data.omega.purificationIsActive[i] ? `#120303` : `black`
 }
 function updatePossiblePurificationHTML(){
@@ -191,7 +191,7 @@ function updatePossiblePurificationHTML(){
     if(data.omega.whichPurification === 2) updateAllBUPHTML()
 }
 function updateAORHTML(i){
-    DOM(`aoR${i}`).innerHTML = `<span style="color: #ce280b">${aoRebuyableData[i].desc} (${formatWhole(getAORLevel(i))})</span><br>Cost: ${format(getAORCost(i))} ℵ<sub>&omega;</sub><br>Currently: ${aoRebuyableData[i].symbol !== 'x' ? aoRebuyableData[i].symbol : ''}${format(getAOREffect(i))}${aoRebuyableData[i].symbol === 'x' ? 'x' : ''} ${aoRebuyableData[i].req() ? '' : `(${formatBool(aoRebuyableData[i].req(), 'AU')})`}`
+    DOM(`aoR${i}`).innerHTML = `<span style="color: #ce280b">${aoRebuyableData[i].desc} (${formatWhole(getAORLevel(i))})</span><br>花费：${format(getAORCost(i))} ℵ<sub>&omega;</sub><br>当前效果：${aoRebuyableData[i].symbol !== 'x' ? aoRebuyableData[i].symbol : ''}${format(getAOREffect(i))}${aoRebuyableData[i].symbol === 'x' ? '倍' : ''} ${aoRebuyableData[i].req() ? '' : `(${formatBool(aoRebuyableData[i].req(), 'AU')})`}`
 }
 function updateAllAORHTML(){
     for (let i = 0; i < data.omega.aoRebuyables.length; i++) {

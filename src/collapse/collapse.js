@@ -125,7 +125,7 @@ function checkUnlocks(mode, i, preview = false){
             if(data.boost.times <= sluggishData[i].req && !data.collapse.hasSluggish[i]){
                 data.collapse.hasSluggish[i] = true
                 data.collapse.cardinals += 3*i
-                createAlert("Congratulations!", `您获得了一个惯性里程碑！\n您还因此获得了 ${3*i} 免费基数！`, 'Great!')
+                createAlert("Congratulations!", `您获得了 1 个惯性里程碑！\n您还因此获得了 ${3*i} 免费基数！`, 'Great!')
                 updateUnlockHTML(1, i)
             }
             break;
