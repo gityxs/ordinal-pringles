@@ -300,7 +300,7 @@ var cnItems = {
     ', multiplying the SGH effect by ': '，使慢速增长层级的效果变为 ',
     ', multiplying Booster Power gain by ': '，使提升器之力获取数量变为 ',
     ', multiplying the IUP3 effect by ': '，使增量升级3的效果变为 ',
-    ', multiplying the first Singularity effect by ': '，使第 1 个奇异的效果变为 ',
+    ', multiplying the first Singularity effect by ': '，使奇异的第 1 个效果变为 ',
     ', multiplying Cardinal gain by ': '，使基数获取数量变为 ',
     'You can ': '进行',
     ' if you reach ': '需要到达 ',
