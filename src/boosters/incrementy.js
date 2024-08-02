@@ -4,7 +4,7 @@ function updateIncrementyHTML(){
     DOM(`iup1`).innerText = `[重复升级2]${iupDesc[1]} (${formatWhole(data.incrementy.rebuyableAmt[1])})\n${format(getRebuyableCost(1))} 增量\n当前效果：${format(iupEffects[1]())}倍`
     DOM(`iup2`).innerText = `[重复升级3]${iupDesc[2]} (${formatWhole(data.incrementy.rebuyableAmt[2])})\n${format(getRebuyableCost(2))} 增量\n当前效果：${format(iupEffects[2]())}倍`
     DOM(`iup9`).innerText = `[重复升级4]${iupDesc[9]} (${formatWhole(data.incrementy.rebuyableAmt[3])})\n${format(getRebuyableCost(3))} 增量\n当前效果：${format(iupEffects[9]())}倍`
-    DOM(`iup10`).innerText = `[重复升级5]${iupDesc[10]} (${formatWhole(data.incrementy.rebuyableAmt[4])})\n${format(getRebuyableCost(4))} 增量\n当前效果：${format(iupEffects[10]())}倍`
+    DOM(`iup10`).innerText = `[重复升级5]${iupDesc[10]} (${formatWhole(data.incrementy.rebuyableAmt[4])})\n${format(getRebuyableCost(4))} 增量\n当前效果：${format(iupEffects[10]())}级`
     DOM(`iup11`).innerText = `[重复升级6]${iupDesc[11]} (${formatWhole(data.incrementy.rebuyableAmt[5])})\n${format(getRebuyableCost(5))} 增量\n当前效果：${format(iupEffects[11]())}倍`
     DOM('chargeButton').innerText = `献祭 ${format(chargeReq())} 增量，获得 1 电荷\n您拥有 ${data.incrementy.charge} 电荷 (共 ${data.incrementy.totalCharge} 个)`
 }
