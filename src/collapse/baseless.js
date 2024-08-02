@@ -78,7 +78,7 @@ const anRebuyableData = [
         unl: () => true
     },
     {
-        desc: "增加减量获取数量指数",
+        desc: "增加减量获取数量的指数",
         eff: () => 0.1*data.baseless.anRebuyables[2],
         costBase: 1e4,
         symbol: '+',
