@@ -270,7 +270,7 @@ var cnItems = {
     'Dividing Darkness Upgrade cost exponents by ': '使黑暗升级花费的指数',
     'Multiplying the effect of the first ℵ': '使第 1 个 ℵ',
     ' Upgrade by ': '升级的效果变为',
-    'Multiplying the effect of the third bottom-row Booster Upgrade by ': '使第 3 个底端行的提升器升级效果变为',
+    'Multiplying the effect of the third bottom-row Booster Upgrade by ': '使最后 1 行的 3 个提升器升级效果变为',
     '"Excess Boosters" means all Boosters above 435': '“超额提升器”指超过 435 个以后的所有提升器',
     '"Excess Charge" means all Charge above 12': '“超额电荷”指超过 12 个以后的所有电荷',
     //#endregion
